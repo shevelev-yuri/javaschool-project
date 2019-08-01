@@ -6,6 +6,6 @@
 </head>
 <body>
 <h1>ECM-system Web Application</h1>
-<a href="patients">Patients list</a>
+<a href="login">Login page</a>
 </body>
 </html>
