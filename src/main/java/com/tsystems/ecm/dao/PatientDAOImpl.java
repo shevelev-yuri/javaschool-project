@@ -1,6 +1,5 @@
-package com.tsystems.ecm.dao.impl;
+package com.tsystems.ecm.dao;
 
-import com.tsystems.ecm.dao.PatientDAO;
 import com.tsystems.ecm.entity.PatientEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -14,12 +13,11 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Repository
-public class PatientDAOImpl implements PatientDAO {
+public class PatientDAOImpl{
 
     @Autowired
     private SessionFactory sessionFactory;
 
-    @Override
     @SuppressWarnings("unchecked")
     public List<PatientEntity> getPatients() {
         Session session = sessionFactory.getCurrentSession();
@@ -31,20 +29,17 @@ public class PatientDAOImpl implements PatientDAO {
         return query.getResultList();
     }
 
-    @Override
     public void deletePatient(int id) {
         Session session = sessionFactory.getCurrentSession();
         PatientEntity patient = session.byId(PatientEntity.class).load(id);
         session.delete(patient);
     }
 
-    @Override
     public void savePatient(PatientEntity patient) {
         Session session = sessionFactory.getCurrentSession();
         session.saveOrUpdate(patient);
     }
 
-    @Override
     public PatientEntity getPatient(int id) {
         Session session = sessionFactory.getCurrentSession();
         return session.get(PatientEntity.class, id);

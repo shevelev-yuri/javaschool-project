@@ -1,7 +1,7 @@
 package com.tsystems.ecm.service.impl;
 
-import com.tsystems.ecm.dao.AuthSessionDAO;
-import com.tsystems.ecm.dao.UserDAO;
+import com.tsystems.ecm.dao.AuthSessionDao;
+import com.tsystems.ecm.dao.UserDao;
 import com.tsystems.ecm.dto.UserSession;
 import com.tsystems.ecm.entity.AuthSessionEntity;
 import com.tsystems.ecm.entity.UserEntity;
@@ -19,28 +19,28 @@ public class AuthorizationSessionServiceImpl implements AuthorizationSessionServ
 
     private ThreadLocal<String> authenticatedUser = new ThreadLocal<>();
 
-    private final UserDAO userDAO;
-    private final AuthSessionDAO authSessionDAO;
+    private final UserDao userDao;
+    private final AuthSessionDao authSessionDao;
 
     @Autowired
-    public AuthorizationSessionServiceImpl(UserDAO userDAO, AuthSessionDAO authSessionDAO) {
-        this.userDAO = userDAO;
-        this.authSessionDAO = authSessionDAO;
+    public AuthorizationSessionServiceImpl(UserDao userDao, AuthSessionDao authSessionDao) {
+        this.userDao = userDao;
+        this.authSessionDao = authSessionDao;
     }
 
     @Override
     public UserSession createOrUpdateSession(String login) {
-        UserEntity user = userDAO.getByLogin(login);
+        UserEntity user = userDao.getByLogin(login);
         if (user == null) {
             throw new ECMException();
         }
 
-        AuthSessionEntity possibleSession = authSessionDAO.getByLogin(login);
+        AuthSessionEntity possibleSession = authSessionDao.getByLogin(login);
         LocalDateTime expiredDate = LocalDateTime.now().plusDays(1);
 
         if (possibleSession != null) {
             possibleSession.setExpiredDate(expiredDate);
-            authSessionDAO.save(possibleSession);
+            authSessionDao.save(possibleSession);
 
             return new UserSession(possibleSession.getSid(), expiredDate, possibleSession.getUserLogin());
         }
@@ -48,27 +48,27 @@ public class AuthorizationSessionServiceImpl implements AuthorizationSessionServ
         AuthSessionEntity entity = new AuthSessionEntity();
         entity.setUserLogin(login);
         entity.setExpiredDate(expiredDate);
-        authSessionDAO.save(entity);
+        authSessionDao.save(entity);
 
         return new UserSession(entity.getSid(), expiredDate, entity.getUserLogin());
     }
 
     @Override
     public boolean isExpired(String sid) {
-        AuthSessionEntity session = authSessionDAO.getBySid(sid);
+        AuthSessionEntity session = authSessionDao.getBySid(sid);
         return session == null || session.getExpiredDate().isBefore(LocalDateTime.now());
     }
 
     @Override
     public String getLoginBySessionId(String sid) {
-        AuthSessionEntity entity = authSessionDAO.getBySid(sid);
+        AuthSessionEntity entity = authSessionDao.getBySid(sid);
         if (entity != null) return entity.getUserLogin();
         else throw new ECMException();
     }
 
     @Override
     public void removeSession(String sid) {
-        authSessionDAO.remove(sid);
+        authSessionDao.remove(sid);
     }
 
     @Override

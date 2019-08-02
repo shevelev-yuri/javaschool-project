@@ -1,6 +1,5 @@
-package com.tsystems.ecm.dao.impl;
+package com.tsystems.ecm.dao;
 
-import com.tsystems.ecm.dao.UserDAO;
 import com.tsystems.ecm.entity.UserEntity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,17 +11,16 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.Query;
 
 @Repository
-public class UserDAOImpl implements UserDAO {
+public class UserDao extends AbstractDao<UserEntity> {
 
-    private static final Logger log = LogManager.getLogger(UserDAOImpl.class);
+    private static final Logger log = LogManager.getLogger(UserDao.class);
 
     @Autowired
     private SessionFactory sessionFactory;
 
-    @Override
     public UserEntity getByLogin(String login) {
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createNativeQuery("select * from users where login = ?1", UserEntity.class).setParameter(1, login);
+        Query query = session.createNativeQuery("select * from users where login = ?", UserEntity.class).setParameter(1, login);
         UserEntity user;
         try {
              user = (UserEntity) query.getSingleResult();

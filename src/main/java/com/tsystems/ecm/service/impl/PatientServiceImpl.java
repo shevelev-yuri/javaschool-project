@@ -1,6 +1,6 @@
 package com.tsystems.ecm.service.impl;
 
-import com.tsystems.ecm.dao.PatientDAO;
+import com.tsystems.ecm.dao.PatientDAOImpl;
 import com.tsystems.ecm.entity.PatientEntity;
 import com.tsystems.ecm.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +12,10 @@ import java.util.List;
 @Service
 public class PatientServiceImpl implements PatientService {
 
-    private PatientDAO patientDAO;
+    private PatientDAOImpl patientDAO;
 
     @Autowired
-    public PatientServiceImpl(PatientDAO patientDAO) {
+    public PatientServiceImpl(PatientDAOImpl patientDAO) {
         this.patientDAO = patientDAO;
     }
 

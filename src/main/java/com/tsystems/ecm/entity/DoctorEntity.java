@@ -8,6 +8,7 @@ public class DoctorEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "doctor_id")
     private int doctorId;
     @Column
     private String name;

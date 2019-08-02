@@ -8,22 +8,14 @@ public class PatientEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "patient_id")
     private int patientId;
-
-    @Column
     private String name;
-
-    @Column
     private String diagnosis;
-
-    @Column
     private String insuranceNumber;
-
     @ManyToOne
-    @JoinColumn(name = "doctorId")
+    @JoinColumn(name = "doctor_id")
     private DoctorEntity doctor;
-
-    @Column
     private String status;
 
     public int getPatientId() {

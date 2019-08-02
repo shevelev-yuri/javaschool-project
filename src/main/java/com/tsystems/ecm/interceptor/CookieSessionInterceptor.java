@@ -16,7 +16,7 @@ public class CookieSessionInterceptor implements HandlerInterceptor {
     private static final String LOGIN = "login";
 
     @Autowired
-    private AuthorizationSessionService authSessionService;
+    private AuthorizationSessionService authorizationSessionService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
@@ -34,13 +34,14 @@ public class CookieSessionInterceptor implements HandlerInterceptor {
             return false;
         }
 
-        if (authSessionService.isExpired(possibleCookie.get().getValue())) {
+        if (authorizationSessionService.isExpired(possibleCookie.get().getValue())) {
             response.sendRedirect(LOGIN);
             return false;
         }
 
-        String login = authSessionService.getLoginBySessionId(possibleCookie.get().getValue());
-        authSessionService.setAuthenticatedUser(login);
+        String login = authorizationSessionService.getLoginBySessionId(possibleCookie.get().getValue());
+        authorizationSessionService.setAuthenticatedUser(login);
+
         return true;
     }
 }

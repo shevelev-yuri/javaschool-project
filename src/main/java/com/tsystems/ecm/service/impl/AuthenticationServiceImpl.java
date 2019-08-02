@@ -1,6 +1,6 @@
 package com.tsystems.ecm.service.impl;
 
-import com.tsystems.ecm.dao.UserDAO;
+import com.tsystems.ecm.dao.UserDao;
 import com.tsystems.ecm.entity.UserEntity;
 import com.tsystems.ecm.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,7 @@ import javax.transaction.Transactional;
 public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Autowired
-    private UserDAO userDAO;
+    private UserDao userDAO;
 
     @Override
     @Transactional

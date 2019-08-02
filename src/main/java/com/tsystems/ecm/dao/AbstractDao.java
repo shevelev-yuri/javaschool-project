@@ -1,16 +1,16 @@
-package com.tsystems.ecm.dao.impl;
+package com.tsystems.ecm.dao;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
-public abstract class AbstractDAO<T> {
+public abstract class AbstractDao<T> {
 
     @Autowired
     private SessionFactory sessionFactory;
 
     public void persist(T entity) {
-        sessionFactory.getCurrentSession().persist(entity);
+        sessionFactory.getCurrentSession().saveOrUpdate(entity);
     }
 
     public void delete(T entity) {
