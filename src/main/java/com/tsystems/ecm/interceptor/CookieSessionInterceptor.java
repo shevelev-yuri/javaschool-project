@@ -19,7 +19,8 @@ public class CookieSessionInterceptor implements HandlerInterceptor {
     private AuthorizationSessionService authorizationSessionService;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
+    public boolean preHandle(HttpServletRequest request,
+                             HttpServletResponse response, Object handler) throws IOException {
         Cookie[] cookies = request.getCookies();
         if (cookies == null) {
             response.sendRedirect(LOGIN);
