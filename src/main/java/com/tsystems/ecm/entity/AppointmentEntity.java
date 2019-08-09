@@ -1,31 +1,40 @@
 package com.tsystems.ecm.entity;
 
+import com.tsystems.ecm.entity.enums.TreatmentType;
+
 import javax.persistence.*;
-import java.time.LocalDate;
 
 @Entity
 @Table(name = "appointments")
 public class AppointmentEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "appointment_id")
-    private int appointmentId;
+    private long appointmentId;
+
     @ManyToOne
     @JoinColumn(name = "patient_id")
     private PatientEntity patient;
-    private String type;
-    @Column(name = "appointment_regimen")
-    private String appointmentRegimen;
-    @Column(name = "appointment_duration")
-    private LocalDate appointmentDuration;
+
+    @OneToOne()
+    @JoinColumn(name = "treatment_id")
+    private TreatmentEntity treatment;
+
+    @Enumerated(value = EnumType.STRING)
+    private TreatmentType type;
+
+    private String regimen;
+
+    private int duration;
+
     private String dose;
 
-    public int getAppointmentId() {
+    public long getAppointmentId() {
         return appointmentId;
     }
 
-    public void setAppointmentId(int appointmentId) {
+    public void setAppointmentId(long appointmentId) {
         this.appointmentId = appointmentId;
     }
 
@@ -37,28 +46,28 @@ public class AppointmentEntity {
         this.patient = patient;
     }
 
-    public String getType() {
+    public TreatmentType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(TreatmentType type) {
         this.type = type;
     }
 
-    public String getAppointmentRegimen() {
-        return appointmentRegimen;
+    public String getRegimen() {
+        return regimen;
     }
 
-    public void setAppointmentRegimen(String appointmentRegimen) {
-        this.appointmentRegimen = appointmentRegimen;
+    public void setRegimen(String appointmentRegimen) {
+        this.regimen = appointmentRegimen;
     }
 
-    public LocalDate getAppointmentDuration() {
-        return appointmentDuration;
+    public int getDuration() {
+        return duration;
     }
 
-    public void setAppointmentDuration(LocalDate appointmentDuration) {
-        this.appointmentDuration = appointmentDuration;
+    public void setDuration(int appointmentDuration) {
+        this.duration = appointmentDuration;
     }
 
     public String getDose() {

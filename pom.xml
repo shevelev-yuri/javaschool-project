@@ -26,8 +26,9 @@
         <flyway.user>postgres</flyway.user>
         <flyway.password>root</flyway.password>
 
-        <sonar.exclusions>src/main</sonar.exclusions>
-        <sonar.coverage.exclusions>src/main/java/**/*</sonar.coverage.exclusions>
+        <sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
+        <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+        <sonar.coverage.jacoco.xmlReportPaths>target/jacoco.exec</sonar.coverage.jacoco.xmlReportPaths>
     </properties>
 
     <dependencies>
@@ -166,6 +167,22 @@
                     <groupId>org.sonarsource.scanner.maven</groupId>
                     <artifactId>sonar-maven-plugin</artifactId>
                     <version>${org.sonarsource.scanner.maven-version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>0.7.0.201403182114</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>prepare-agent</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <destFile>${sonar.jacoco.reportPath}</destFile>
+                    </configuration>
                 </plugin>
 
                 <plugin>

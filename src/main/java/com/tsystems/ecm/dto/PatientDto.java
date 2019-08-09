@@ -1,28 +1,28 @@
-package com.tsystems.ecm.entity;
+package com.tsystems.ecm.dto;
 
+import com.tsystems.ecm.entity.PatientEntity;
 import com.tsystems.ecm.entity.enums.PatientStatus;
 
-import javax.persistence.*;
+public class PatientDto {
 
-@Entity
-@Table(name = "patients")
-public class PatientEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "patient_id")
     private long patientId;
-
     private String name;
-
     private String diagnosis;
-
     private String insuranceNumber;
-
     private String doctorName;
-
-    @Enumerated(value = EnumType.STRING)
     private PatientStatus patientStatus;
+
+    public PatientDto() {
+    }
+
+    public PatientDto(PatientEntity patientEntity) {
+        this.patientId = patientEntity.getPatientId();
+        this.name = patientEntity.getName();
+        this.diagnosis = patientEntity.getDiagnosis();
+        this.insuranceNumber = patientEntity.getInsuranceNumber();
+        this.doctorName = patientEntity.getDoctorName();
+        this.patientStatus = patientEntity.getPatientStatus();
+    }
 
     public long getPatientId() {
         return patientId;
@@ -56,19 +56,19 @@ public class PatientEntity {
         this.insuranceNumber = insuranceNumber;
     }
 
-    public String getDoctorName() {
-        return doctorName;
-    }
-
-    public void setDoctorName(String doctorName) {
-        this.doctorName = doctorName;
-    }
-
     public PatientStatus getPatientStatus() {
         return patientStatus;
     }
 
     public void setPatientStatus(PatientStatus patientStatus) {
         this.patientStatus = patientStatus;
+    }
+
+    public String getDoctorName() {
+        return doctorName;
+    }
+
+    public void setDoctorName(String doctorName) {
+        this.doctorName = doctorName;
     }
 }

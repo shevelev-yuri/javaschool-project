@@ -1,25 +1,27 @@
-package com.tsystems.ecm.entity;
+package com.tsystems.ecm.dto;
 
 import com.tsystems.ecm.entity.enums.Role;
+import com.tsystems.ecm.entity.UserEntity;
 
-import javax.persistence.*;
+public class UserDto {
 
-@Entity
-@Table(name = "users")
-public class UserEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private String login;
 
-    private String password;
-
     private String name;
 
-    @Enumerated(value = EnumType.STRING)
     private Role role;
+
+    public UserDto() {
+    }
+
+    public UserDto(UserEntity userEntity) {
+        this.id = userEntity.getId();
+        this.login = userEntity.getLogin();
+        this.name = userEntity.getName();
+        this.role = userEntity.getRole();
+    }
 
     public long getId() {
         return id;
@@ -35,14 +37,6 @@ public class UserEntity {
 
     public void setLogin(String login) {
         this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getName() {

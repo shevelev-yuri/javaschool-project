@@ -2,22 +2,27 @@ package com.tsystems.ecm.dao;
 
 import com.tsystems.ecm.entity.AuthSessionEntity;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
 
 @Repository
-public class AuthSessionDao extends AbstractDao {
+public class AuthSessionDao extends AbstractDao<AuthSessionEntity> {
 
-    @Autowired
-    private SessionFactory sessionFactory;
+    private static final String SELECT_FROM_AUTH_SESSIONS_WHERE_USER_LOGIN = "select * from auth_sessions where userLogin = ?";
+
+    public void save(AuthSessionEntity authSession) {
+        persist(authSession);
+    }
+
+    public AuthSessionEntity get(String sid) {
+        return getSessionFactory().getCurrentSession().get(AuthSessionEntity.class, sid);
+    }
 
     public AuthSessionEntity getByLogin(String login) {
-        Session session = sessionFactory.getCurrentSession();
+        Session session = getSessionFactory().getCurrentSession();
         Query query = session.createNativeQuery(
-                "select * from auth_sessions where user_login = ?", AuthSessionEntity.class).setParameter(1, login);
+                SELECT_FROM_AUTH_SESSIONS_WHERE_USER_LOGIN, AuthSessionEntity.class).setParameter(1, login);
         AuthSessionEntity authSession;
         try {
             authSession = (AuthSessionEntity) query.getSingleResult();
@@ -27,16 +32,9 @@ public class AuthSessionDao extends AbstractDao {
         return authSession;
     }
 
-    public AuthSessionEntity getBySid(String sid) {
-        Session session = sessionFactory.getCurrentSession();
-        return session.get(AuthSessionEntity.class, sid);
-    }
-
-    public void save(AuthSessionEntity authSession) {
-        persist(authSession);
-    }
-
     public void remove(String sid) {
-        delete(sid);
+        Session session = getSessionFactory().getCurrentSession();
+        AuthSessionEntity authSession = session.byId(AuthSessionEntity.class).load(sid);
+        delete(authSession);
     }
 }

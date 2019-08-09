@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public class CookieSessionInterceptor implements HandlerInterceptor {
 
-    private static final String LOGIN = "login";
+    private static final String LOGIN = "/login";
 
     @Autowired
     private AuthorizationSessionService authorizationSessionService;
@@ -21,27 +21,28 @@ public class CookieSessionInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) throws IOException {
+
+        String contextPath = request.getContextPath();
+
         Cookie[] cookies = request.getCookies();
         if (cookies == null) {
-            response.sendRedirect(LOGIN);
+            response.sendRedirect(contextPath + LOGIN);
             return false;
         }
 
         Optional<Cookie> possibleCookie = Arrays.stream(cookies)
                 .filter(c -> c.getName().equals("AUTH_SESSION"))
                 .findFirst();
+
         if (!possibleCookie.isPresent()) {
-            response.sendRedirect(LOGIN);
+            response.sendRedirect(contextPath + LOGIN);
             return false;
         }
 
         if (authorizationSessionService.isExpired(possibleCookie.get().getValue())) {
-            response.sendRedirect(LOGIN);
+            response.sendRedirect(contextPath + LOGIN);
             return false;
         }
-
-        String login = authorizationSessionService.getLoginBySessionId(possibleCookie.get().getValue());
-        authorizationSessionService.setAuthenticatedUser(login);
 
         return true;
     }

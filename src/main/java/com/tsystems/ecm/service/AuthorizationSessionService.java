@@ -1,19 +1,15 @@
 package com.tsystems.ecm.service;
 
-import com.tsystems.ecm.dto.UserSession;
+import com.tsystems.ecm.dto.UserSessionDto;
 
 public interface AuthorizationSessionService {
 
-    UserSession createOrUpdateSession(String login);
+    UserSessionDto createOrUpdateSession(String login);
 
     boolean isExpired(String sid);
 
     String getLoginBySessionId(String sid);
 
     void removeSession(String sid);
-
-    String getAuthenticatedUser();
-
-    void setAuthenticatedUser(String login);
 
 }

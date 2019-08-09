@@ -17,4 +17,7 @@ public abstract class AbstractDao<T> {
         sessionFactory.getCurrentSession().delete(entity);
     }
 
+    protected SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
 }

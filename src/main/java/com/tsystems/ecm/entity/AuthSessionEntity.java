@@ -13,9 +13,7 @@ public class AuthSessionEntity {
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
     private String sid;
-    @Column(name = "expired_date")
     private LocalDateTime expiredDate;
-    @Column(name = "user_login")
     private String userLogin;
 
     public String getSid() {

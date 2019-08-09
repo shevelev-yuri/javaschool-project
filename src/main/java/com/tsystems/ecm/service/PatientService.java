@@ -1,16 +1,16 @@
 package com.tsystems.ecm.service;
 
-import com.tsystems.ecm.entity.PatientEntity;
+import com.tsystems.ecm.dto.PatientDto;
 
 import java.util.List;
 
 public interface PatientService {
 
-    List<PatientEntity> getPatients();
+    List<PatientDto> getAllPatients();
 
-    void savePatient(PatientEntity thePatient);
+    PatientDto getPatientById(int id);
 
-    PatientEntity getPatient(int theId);
+    void deletePatient(int id);
 
-    void deletePatient(int theId);
+    long addPatientAndReturnId(PatientDto patient);
 }

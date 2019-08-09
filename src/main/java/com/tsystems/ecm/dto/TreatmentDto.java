@@ -1,21 +1,13 @@
-package com.tsystems.ecm.entity;
+package com.tsystems.ecm.dto;
 
 import com.tsystems.ecm.entity.enums.TreatmentType;
 
-import javax.persistence.*;
+public class TreatmentDto {
 
-@Entity
-@Table(name = "treatments")
-public class TreatmentEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "treatment_id")
     private long treatmentId;
 
     private String treatmentName;
 
-    @Enumerated(value = EnumType.STRING)
     private TreatmentType treatmentType;
 
     public long getTreatmentId() {

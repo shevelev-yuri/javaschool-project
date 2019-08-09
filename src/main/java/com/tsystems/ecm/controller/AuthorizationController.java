@@ -1,6 +1,6 @@
 package com.tsystems.ecm.controller;
 
-import com.tsystems.ecm.dto.UserSession;
+import com.tsystems.ecm.dto.UserSessionDto;
 import com.tsystems.ecm.service.AuthenticationService;
 import com.tsystems.ecm.service.AuthorizationSessionService;
 import org.apache.logging.log4j.LogManager;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @Controller
 public class AuthorizationController {
@@ -21,16 +22,17 @@ public class AuthorizationController {
     private static final String LOGIN = "login";
 
     private final AuthenticationService authService;
-    private final AuthorizationSessionService authSessionService;
+    private final AuthorizationSessionService authorizationSessionService;
 
     @Autowired
-    public AuthorizationController(AuthenticationService authService, AuthorizationSessionService authSessionService) {
+    public AuthorizationController(AuthenticationService authService, AuthorizationSessionService authorizationSessionService) {
         this.authService = authService;
-        this.authSessionService = authSessionService;
+        this.authorizationSessionService = authorizationSessionService;
     }
 
     @GetMapping("/login")
     public String loginPage() {
+
         return LOGIN;
     }
 
@@ -38,17 +40,21 @@ public class AuthorizationController {
     public String login(HttpServletResponse response,
                         HttpServletRequest request) {
         boolean result = authService.authenticate(request.getParameter(LOGIN), request.getParameter("password"));
-        log.info("Requested login and password: {}, {}. Authenticate = {}", request.getParameter(LOGIN), request.getParameter("password"), result);
+
+        log.info("User with login \"{}\" authenticated? = {}", request.getParameter(LOGIN), result);
+
         if (!result) {
             return LOGIN;
         }
 
-        UserSession session = authSessionService.createOrUpdateSession(request.getParameter(LOGIN));
-        response.addCookie(new Cookie("AUTH_SESSION", session.getSid()));
+        UserSessionDto session = authorizationSessionService.createOrUpdateSession(request.getParameter(LOGIN));
+        Cookie sessionCookie = new Cookie("AUTH_SESSION", session.getSid());
+        Cookie userNameCookie = new Cookie("userName", session.getUserName().replaceAll("\\s","-"));
+        sessionCookie.setMaxAge(60*60*24);
+        userNameCookie.setMaxAge(60*60*24);
+        response.addCookie(sessionCookie);
+        response.addCookie(userNameCookie);
 
         return "redirect:/patients";
     }
-
-
-
 }

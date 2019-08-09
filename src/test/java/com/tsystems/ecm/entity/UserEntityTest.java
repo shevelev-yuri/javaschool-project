@@ -9,7 +9,7 @@ import static org.junit.Assert.assertNotEquals;
 public class UserEntityTest {
 
 
-    private static final Integer ID = 1;
+    private static final long ID = 1;
     private static final String LOGIN = "login";
     private static final String PSWD = "pswd";
     private static final UserEntity user = new UserEntity();
@@ -49,7 +49,7 @@ public class UserEntityTest {
     }
 
     @Test
-    public void setPassword() {
+    public void setPassword_success() {
         user.setPassword("newpswd");
         assertNotEquals(PSWD, user.getPassword());
     }

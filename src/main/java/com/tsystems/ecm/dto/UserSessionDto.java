@@ -2,23 +2,25 @@ package com.tsystems.ecm.dto;
 
 import java.time.LocalDateTime;
 
-public class UserSession {
+public class UserSessionDto {
 
     private String sid;
     private LocalDateTime expiredDate;
     private String login;
+    private String userName;
 
     public String getSid() {
         return sid;
     }
 
-    public UserSession(String sid, LocalDateTime expiredDate, String login) {
+    public UserSessionDto(String sid, LocalDateTime expiredDate, String login, String userName) {
         this.sid = sid;
         this.expiredDate = expiredDate;
         this.login = login;
+        this.userName = userName;
     }
 
-    public UserSession() {
+    public UserSessionDto() {
     }
 
     public void setSid(String sid) {
@@ -39,6 +41,14 @@ public class UserSession {
 
     public void setLogin(String login) {
         this.login = login;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }
 
