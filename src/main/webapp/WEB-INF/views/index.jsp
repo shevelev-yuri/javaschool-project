@@ -21,8 +21,9 @@
             </div>
     </c:otherwise>
 </c:choose>
+<br>
 <div>
-    <a href="patients">View all patients</a>
+    <a href="/ecm/patients">View all patients</a>
 </div>
 
 </body>

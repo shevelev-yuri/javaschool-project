@@ -1,15 +1,15 @@
 create table if not exists treatments
 (
     treatment_id  serial primary key,
-    treatmentName varchar(100) not null,
+    treatmentName varchar(100) not null unique,
     treatmentType varchar(20)  not null
 );
 
 create table if not exists appointments
 (
     appointment_id serial primary key,
-    patient_id     integer     not null unique,
-    treatment_id   integer     not null unique,
+    patient_id     integer     not null,
+    treatment_id   integer     not null,
     type           varchar(20) not null,
     regimen        varchar(50) not null,
     duration       integer     not null,

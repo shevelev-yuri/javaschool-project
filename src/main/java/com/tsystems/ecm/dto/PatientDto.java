@@ -3,20 +3,34 @@ package com.tsystems.ecm.dto;
 import com.tsystems.ecm.entity.PatientEntity;
 import com.tsystems.ecm.entity.enums.PatientStatus;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+
 public class PatientDto {
 
-    private long patientId;
+    private long id;
+
+    @NotBlank(message = "Patient\'s name must be specified!")
     private String name;
+
+    @NotBlank(message = "Diagnosis must be specified!")
     private String diagnosis;
+
+    @NotBlank(message = "Insurance number must be specified!")
+    @Pattern(regexp = "[0-9]{3}-[0-9]{4}-[0-9]{3}$", message = "Insurance number format is ###-####-#### where # is any digit (0-9).")
     private String insuranceNumber;
+
+    @NotBlank(message = "Treating doctor not selected!")
     private String doctorName;
+
+/* @NotNull(message = "Status must be specified!") */
     private PatientStatus patientStatus;
 
     public PatientDto() {
     }
 
     public PatientDto(PatientEntity patientEntity) {
-        this.patientId = patientEntity.getPatientId();
+        this.id = patientEntity.getId();
         this.name = patientEntity.getName();
         this.diagnosis = patientEntity.getDiagnosis();
         this.insuranceNumber = patientEntity.getInsuranceNumber();
@@ -24,12 +38,12 @@ public class PatientDto {
         this.patientStatus = patientEntity.getPatientStatus();
     }
 
-    public long getPatientId() {
-        return patientId;
+    public long getId() {
+        return id;
     }
 
-    public void setPatientId(long patientId) {
-        this.patientId = patientId;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -70,5 +84,17 @@ public class PatientDto {
 
     public void setDoctorName(String doctorName) {
         this.doctorName = doctorName;
+    }
+
+    @Override
+    public String toString() {
+        return "PatientDto{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", diagnosis='" + diagnosis + '\'' +
+                ", insuranceNumber='" + insuranceNumber + '\'' +
+                ", doctorName='" + doctorName + '\'' +
+                ", patientStatus=" + patientStatus +
+                '}';
     }
 }

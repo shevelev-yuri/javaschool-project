@@ -9,6 +9,8 @@ import java.util.List;
 @Repository
 public class PatientDao extends AbstractDao<PatientEntity> {
 
+    private static final String SELECT_ALL_PATIENT_ENTITY = "FROM PatientEntity";
+
     public void save(PatientEntity patient) {
         persist(patient);
     }
@@ -18,7 +20,7 @@ public class PatientDao extends AbstractDao<PatientEntity> {
     }
 
     public List<PatientEntity> getAll() {
-        return getSessionFactory().getCurrentSession().createQuery("FROM PatientEntity", PatientEntity.class).getResultList();
+        return getSessionFactory().getCurrentSession().createQuery(SELECT_ALL_PATIENT_ENTITY, PatientEntity.class).getResultList();
     }
 
     public void remove(long id) {

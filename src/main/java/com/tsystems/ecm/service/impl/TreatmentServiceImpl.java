@@ -16,19 +16,19 @@ import java.util.stream.Collectors;
 public class TreatmentServiceImpl implements TreatmentService {
 
     private TreatmentDao treatmentDao;
-    private TreatmentEntityToTreatmentDtoMapper mapperEntityToDto;
+    private TreatmentEntityToTreatmentDtoMapper toTreatmentDtoMapper;
 
     @Autowired
     public TreatmentServiceImpl(TreatmentDao treatmentDao,
-                                TreatmentEntityToTreatmentDtoMapper mapperEntityToDto) {
+                                TreatmentEntityToTreatmentDtoMapper toTreatmentDtoMapper) {
         this.treatmentDao = treatmentDao;
-        this.mapperEntityToDto = mapperEntityToDto;
+        this.toTreatmentDtoMapper = toTreatmentDtoMapper;
     }
 
     @Override
     @Transactional
     public List<TreatmentDto> getAll() {
         List<TreatmentEntity> entities = treatmentDao.getAll();
-        return entities.stream().map(mapperEntityToDto::map).collect(Collectors.toList());
+        return entities.stream().map(toTreatmentDtoMapper::map).collect(Collectors.toList());
     }
 }

@@ -4,8 +4,6 @@ import com.tsystems.ecm.entity.UserEntity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
@@ -20,15 +18,12 @@ public class UserDao extends AbstractDao<UserEntity> {
     private static final String SELECT_USER_BY_LOGIN = "select * from users where login = ?";
     private static final String SELECT_ALL_USER_ENTITY = "FROM UserEntity";
 
-    @Autowired
-    private SessionFactory sessionFactory;
-
     public UserEntity getByLogin(String login) {
-        Session session = sessionFactory.getCurrentSession();
+        Session session = getSessionFactory().getCurrentSession();
         Query query = session.createNativeQuery(SELECT_USER_BY_LOGIN, UserEntity.class).setParameter(1, login);
         UserEntity user;
         try {
-             user = (UserEntity) query.getSingleResult();
+            user = (UserEntity) query.getSingleResult();
         } catch (NoResultException nre) {
             log.debug(nre.getMessage());
             return null;

@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -7,34 +8,39 @@
 </head>
 <body>
 <h2>Add new patients</h2>
-<form action="add" method="post">
-
+<%--@elvariable id="patient" type="com.tsystems.ecm.dto.PatientDto"--%>
+<form:form action="add" method="post" modelAttribute="patient">
+    <br>
     <div>
-        <label for="name">Patients name</label>
-        <input id="name" name="name"/>
+        <form:label path="name">Patients name</form:label>
+        <form:input path="name"/>
+        <form:errors path="name"/>
     </div>
-
+    <br>
     <div>
-        <label for="diagnosis">Diagnosis</label>
-        <input id="diagnosis" name="diagnosis"/>
+        <form:label path="diagnosis">Diagnosis</form:label>
+        <form:input path="diagnosis"/>
+        <form:errors path="diagnosis"/>
     </div>
-
+    <br>
     <div>
-        <label for="insurance">Insurance number</label>
-        <input id="insurance" name="insuranceNumber"/>
+        <form:label path="insuranceNumber">Insurance number</form:label>
+        <form:input path="insuranceNumber"/>
+        <form:errors path="insuranceNumber"/>
     </div>
-
+    <br>
     <div>
-        <select id="doctor" name="doctorName">
-            <option value="" selected disabled hidden>Select doctor..</option>
+        <form:select path="doctorName">
+            <form:option value="" selected="selected" disabled="true" hidden="true" label="Select doctor.."/>
             <c:forEach var="doctor" items="${doctors}">
-                <option value="${doctor.name}">${doctor.name}</option>
+                <form:option value="${doctor.name}" label="${doctor.name}"/>
             </c:forEach>
-        </select>
+        </form:select>
+        <form:errors path="doctorName"/>
     </div>
-
+    <form:hidden path="patientStatus" value="ON_TREATMENT"/>
+    <br>
     <button type="submit">Add patient</button>
-
-</form>
+</form:form>
 </body>
 </html>

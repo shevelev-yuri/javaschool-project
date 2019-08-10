@@ -11,7 +11,7 @@ public class PatientEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "patient_id")
-    private long patientId;
+    private long id;
 
     private String name;
 
@@ -24,12 +24,12 @@ public class PatientEntity {
     @Enumerated(value = EnumType.STRING)
     private PatientStatus patientStatus;
 
-    public long getPatientId() {
-        return patientId;
+    public long getId() {
+        return id;
     }
 
-    public void setPatientId(long patientId) {
-        this.patientId = patientId;
+    public void setId(long patientId) {
+        this.id = patientId;
     }
 
     public String getName() {

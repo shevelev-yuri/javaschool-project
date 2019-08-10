@@ -1,27 +1,15 @@
-package com.tsystems.ecm.entity;
+package com.tsystems.ecm.dto;
 
 import com.tsystems.ecm.entity.enums.TreatmentType;
 
-import javax.persistence.*;
+public class AppointmentDto {
 
-@Entity
-@Table(name = "appointments")
-public class AppointmentEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "appointment_id")
     private long id;
 
-    @ManyToOne
-    @JoinColumn(name = "patient_id")
-    private PatientEntity patient;
+    private PatientDto patient;
 
-    @OneToOne
-    @JoinColumn(name = "treatment_id")
-    private TreatmentEntity treatment;
+    private TreatmentDto treatment;
 
-    @Enumerated(value = EnumType.STRING)
     private TreatmentType type;
 
     private String regimen;
@@ -38,19 +26,19 @@ public class AppointmentEntity {
         this.id = id;
     }
 
-    public PatientEntity getPatient() {
+    public PatientDto getPatient() {
         return patient;
     }
 
-    public void setPatient(PatientEntity patient) {
+    public void setPatient(PatientDto patient) {
         this.patient = patient;
     }
 
-    public TreatmentEntity getTreatment() {
+    public TreatmentDto getTreatment() {
         return treatment;
     }
 
-    public void setTreatment(TreatmentEntity treatment) {
+    public void setTreatment(TreatmentDto treatment) {
         this.treatment = treatment;
     }
 
@@ -88,7 +76,7 @@ public class AppointmentEntity {
 
     @Override
     public String toString() {
-        return "AppointmentEntity{" +
+        return "AppointmentDto{" +
                 "id=" + id +
                 ", patient=" + patient +
                 ", treatment=" + treatment +

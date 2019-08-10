@@ -11,19 +11,19 @@ public class TreatmentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "treatment_id")
-    private long treatmentId;
+    private long id;
 
     private String treatmentName;
 
     @Enumerated(value = EnumType.STRING)
     private TreatmentType treatmentType;
 
-    public long getTreatmentId() {
-        return treatmentId;
+    public long getId() {
+        return id;
     }
 
-    public void setTreatmentId(long treatmentId) {
-        this.treatmentId = treatmentId;
+    public void setId(long treatmentId) {
+        this.id = treatmentId;
     }
 
     public String getTreatmentName() {

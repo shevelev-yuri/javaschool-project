@@ -49,9 +49,9 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     @Transactional
-    public long addPatientAndReturnId(PatientDto patient) {
+    public long addPatient(PatientDto patient) {
         PatientEntity patientEntity = mapperDtoToEntity.map(patient);
         patientDao.save(patientEntity);
-        return patientEntity.getPatientId();
+        return patientEntity.getId();
     }
 }

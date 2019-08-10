@@ -6,7 +6,7 @@
     <title>Title</title>
 </head>
 <body>
-<a href="patients/add">Add new patient</a>
+<a href="/ecm/patients/add">Add new patient</a>
 <table>
     <thead>
     <tr>
@@ -32,13 +32,13 @@
             <td>
                 <form method="get" action="patients/appointment">
                     <input type="text" name="name" value="${patient.name}" hidden>
-                    <button type="submit"name="patientId" value="${patient.patientId}">Add appointment</button>
+                    <button type="submit"name="id" value="${patient.id}">Add appointment</button>
                 </form>
             </td>
             <td>
                 <form method="get" action="patients/appointments">
                     <input type="text" name="name" value="${patient.name}" hidden>
-                    <button type="submit" name="patientId" value="${patient.patientId}">View appointments</button>
+                    <button type="submit" name="id" value="${patient.id}">View appointments</button>
                 </form>
             </td>
         </tr>

@@ -5,15 +5,14 @@ import com.tsystems.ecm.entity.TreatmentEntity;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TreatmentEntityToTreatmentDtoMapper {
+public class TreatmentDtoToTreatmentEntityMapper {
 
-    public TreatmentDto map(TreatmentEntity src) {
-        TreatmentDto dst = new TreatmentDto();
-
-        dst.setId(src.getId());
+    public TreatmentEntity map(TreatmentDto src) {
+        TreatmentEntity dst = new TreatmentEntity();
         dst.setTreatmentName(src.getTreatmentName());
         dst.setTreatmentType(src.getTreatmentType());
 
         return dst;
     }
+
 }

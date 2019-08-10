@@ -10,7 +10,7 @@ public class PatientEntityToPatientDtoMapper {
     public PatientDto map(PatientEntity src) {
         PatientDto dst = new PatientDto();
 
-        dst.setPatientId(src.getPatientId());
+        dst.setId(src.getId());
         dst.setName(src.getName());
         dst.setDiagnosis(src.getDiagnosis());
         dst.setInsuranceNumber(src.getInsuranceNumber());

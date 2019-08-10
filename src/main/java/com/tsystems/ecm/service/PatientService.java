@@ -12,5 +12,5 @@ public interface PatientService {
 
     void deletePatient(int id);
 
-    long addPatientAndReturnId(PatientDto patient);
+    long addPatient(PatientDto patient);
 }

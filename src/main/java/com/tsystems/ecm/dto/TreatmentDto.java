@@ -4,18 +4,18 @@ import com.tsystems.ecm.entity.enums.TreatmentType;
 
 public class TreatmentDto {
 
-    private long treatmentId;
+    private long id;
 
     private String treatmentName;
 
     private TreatmentType treatmentType;
 
-    public long getTreatmentId() {
-        return treatmentId;
+    public long getId() {
+        return id;
     }
 
-    public void setTreatmentId(long treatmentId) {
-        this.treatmentId = treatmentId;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getTreatmentName() {
