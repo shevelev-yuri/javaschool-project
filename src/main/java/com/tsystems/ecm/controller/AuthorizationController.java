@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 @Controller
 public class AuthorizationController {
@@ -52,6 +51,8 @@ public class AuthorizationController {
         Cookie userNameCookie = new Cookie("userName", session.getUserName().replaceAll("\\s","-"));
         sessionCookie.setMaxAge(60*60*24);
         userNameCookie.setMaxAge(60*60*24);
+        sessionCookie.setHttpOnly(true);
+        userNameCookie.setHttpOnly(true);
         response.addCookie(sessionCookie);
         response.addCookie(userNameCookie);
 

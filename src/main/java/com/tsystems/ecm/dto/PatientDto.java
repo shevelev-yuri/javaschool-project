@@ -23,7 +23,6 @@ public class PatientDto {
     @NotBlank(message = "Treating doctor not selected!")
     private String doctorName;
 
-/* @NotNull(message = "Status must be specified!") */
     private PatientStatus patientStatus;
 
     public PatientDto() {

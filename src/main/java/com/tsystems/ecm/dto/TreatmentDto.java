@@ -33,4 +33,13 @@ public class TreatmentDto {
     public void setTreatmentType(TreatmentType treatmentType) {
         this.treatmentType = treatmentType;
     }
+
+    @Override
+    public String toString() {
+        return "TreatmentDto{" +
+                "id=" + id +
+                ", treatmentName='" + treatmentName + '\'' +
+                ", treatmentType=" + treatmentType +
+                '}';
+    }
 }

@@ -1,7 +1,7 @@
 package com.tsystems.ecm.dto;
 
-import com.tsystems.ecm.entity.enums.Role;
 import com.tsystems.ecm.entity.UserEntity;
+import com.tsystems.ecm.entity.enums.Role;
 
 public class UserDto {
 

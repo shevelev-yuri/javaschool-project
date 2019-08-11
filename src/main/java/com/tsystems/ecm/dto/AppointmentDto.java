@@ -78,8 +78,8 @@ public class AppointmentDto {
     public String toString() {
         return "AppointmentDto{" +
                 "id=" + id +
-                ", patient=" + patient +
-                ", treatment=" + treatment +
+                ", patient=" + patient.getName() +
+                ", treatment=" + treatment.getTreatmentName() +
                 ", type=" + type +
                 ", regimen='" + regimen + '\'' +
                 ", duration=" + duration +

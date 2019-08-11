@@ -7,4 +7,6 @@ import java.util.List;
 public interface TreatmentService {
 
     List<TreatmentDto> getAll();
+
+    TreatmentDto get(long treatmentId);
 }

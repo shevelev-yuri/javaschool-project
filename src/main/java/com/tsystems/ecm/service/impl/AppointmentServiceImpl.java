@@ -6,15 +6,19 @@ import com.tsystems.ecm.entity.AppointmentEntity;
 import com.tsystems.ecm.mapper.AppointmentDtoToAppointmentEntityMapper;
 import com.tsystems.ecm.mapper.AppointmentEntityToAppointmentDtoMapper;
 import com.tsystems.ecm.service.AppointmentService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class AppointmentServiceImpl implements AppointmentService {
+
+    private static final Logger log = LogManager.getLogger(AppointmentServiceImpl.class);
 
     private AppointmentDao appointmentDao;
 
@@ -38,6 +42,7 @@ public class AppointmentServiceImpl implements AppointmentService {
      * @return the {@code id} of saved appointment entity
      */
     @Override
+    @Transactional
     public long addAppointment(AppointmentDto appointmentDto) {
         AppointmentEntity appointmentEntity = toAppointmentEntityMapper.map(appointmentDto);
         appointmentDao.save(appointmentEntity);
@@ -52,6 +57,7 @@ public class AppointmentServiceImpl implements AppointmentService {
      * @return a {@code List} that contains all appointments of the specified patient
      */
     @Override
+    @Transactional
     public List<AppointmentDto> getAllByPatientId(long id) {
         List<AppointmentEntity> entities = appointmentDao.getAllByPatientId(id);
 

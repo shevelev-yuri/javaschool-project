@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 public class TreatmentServiceImpl implements TreatmentService {
 
     private TreatmentDao treatmentDao;
+
     private TreatmentEntityToTreatmentDtoMapper toTreatmentDtoMapper;
 
     @Autowired
@@ -28,7 +29,12 @@ public class TreatmentServiceImpl implements TreatmentService {
     @Override
     @Transactional
     public List<TreatmentDto> getAll() {
-        List<TreatmentEntity> entities = treatmentDao.getAll();
-        return entities.stream().map(toTreatmentDtoMapper::map).collect(Collectors.toList());
+        return treatmentDao.getAll().stream().map(toTreatmentDtoMapper::map).collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public TreatmentDto get(long treatmentId) {
+        return toTreatmentDtoMapper.map(treatmentDao.get(treatmentId));
     }
 }

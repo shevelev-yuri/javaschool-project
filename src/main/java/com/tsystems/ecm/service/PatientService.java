@@ -8,9 +8,9 @@ public interface PatientService {
 
     List<PatientDto> getAllPatients();
 
-    PatientDto getPatientById(int id);
+    PatientDto get(long id);
 
-    void deletePatient(int id);
+    void delete(long id);
 
     long addPatient(PatientDto patient);
 }

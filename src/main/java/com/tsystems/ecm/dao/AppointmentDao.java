@@ -35,8 +35,10 @@ public class AppointmentDao extends AbstractDao<AppointmentEntity> {
             return null;
         }
         log.info("All appointments for patient with id: {} found!", id);
-        for (AppointmentEntity appointmentEntity : appointments) {
-            log.info(appointmentEntity.toString());
+        if (log.isInfoEnabled()) {
+            for (AppointmentEntity appointmentEntity : appointments) {
+                log.info(appointmentEntity.toString());
+            }
         }
         return appointments;
     }

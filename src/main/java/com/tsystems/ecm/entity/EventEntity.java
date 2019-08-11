@@ -12,7 +12,7 @@ public class EventEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "event_id")
-    private long eventId;
+    private long id;
     @ManyToOne
     @JoinColumn(name = "patient_id")
     private PatientEntity patient;
@@ -26,12 +26,12 @@ public class EventEntity {
     @JoinColumn(name = "treatment_id")
     private TreatmentEntity treatment;
 
-    public long getEventId() {
-        return eventId;
+    public long getId() {
+        return id;
     }
 
-    public void setEventId(long eventId) {
-        this.eventId = eventId;
+    public void setId(long eventId) {
+        this.id = eventId;
     }
 
     public PatientEntity getPatient() {

@@ -30,14 +30,12 @@
             <td>${patient.doctorName}</td>
             <td>${patient.patientStatus}</td>
             <td>
-                <form method="get" action="patients/appointment">
-                    <input type="text" name="name" value="${patient.name}" hidden>
+                <form method="get" action="appointments/add${patient.id}">
                     <button type="submit"name="id" value="${patient.id}">Add appointment</button>
                 </form>
             </td>
             <td>
-                <form method="get" action="patients/appointments">
-                    <input type="text" name="name" value="${patient.name}" hidden>
+                <form method="get" action="appointments/appointments${patient.id}">
                     <button type="submit" name="id" value="${patient.id}">View appointments</button>
                 </form>
             </td>

@@ -90,8 +90,8 @@ public class AppointmentEntity {
     public String toString() {
         return "AppointmentEntity{" +
                 "id=" + id +
-                ", patient=" + patient +
-                ", treatment=" + treatment +
+                ", patient=" + patient.toString() +
+                ", treatment=" + treatment.toString() +
                 ", type=" + type +
                 ", regimen='" + regimen + '\'' +
                 ", duration=" + duration +

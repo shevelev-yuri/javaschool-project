@@ -71,4 +71,16 @@ public class PatientEntity {
     public void setPatientStatus(PatientStatus patientStatus) {
         this.patientStatus = patientStatus;
     }
+
+    @Override
+    public String toString() {
+        return "PatientEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", diagnosis='" + diagnosis + '\'' +
+                ", insuranceNumber='" + insuranceNumber + '\'' +
+                ", doctorName='" + doctorName + '\'' +
+                ", patientStatus=" + patientStatus +
+                '}';
+    }
 }

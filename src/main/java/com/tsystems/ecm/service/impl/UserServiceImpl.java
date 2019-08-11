@@ -2,8 +2,8 @@ package com.tsystems.ecm.service.impl;
 
 import com.tsystems.ecm.dao.UserDao;
 import com.tsystems.ecm.dto.UserDto;
-import com.tsystems.ecm.entity.enums.Role;
 import com.tsystems.ecm.entity.UserEntity;
+import com.tsystems.ecm.entity.enums.Role;
 import com.tsystems.ecm.mapper.UserEntityToUserDtoMapper;
 import com.tsystems.ecm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

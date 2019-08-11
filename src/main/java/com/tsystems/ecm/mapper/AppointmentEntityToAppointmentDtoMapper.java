@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 public class AppointmentEntityToAppointmentDtoMapper {
 
     private PatientEntityToPatientDtoMapper toPatientDtoMapper;
+
     private TreatmentEntityToTreatmentDtoMapper toTreatmentDtoMapper;
 
     public AppointmentEntityToAppointmentDtoMapper(PatientEntityToPatientDtoMapper toPatientDtoMapper,

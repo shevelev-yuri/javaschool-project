@@ -17,7 +17,9 @@ import java.util.stream.Collectors;
 public class PatientServiceImpl implements PatientService {
 
     private PatientDao patientDao;
+
     private PatientEntityToPatientDtoMapper mapperEntityToDto;
+
     private PatientDtoToPatientEntityMapper mapperDtoToEntity;
 
     @Autowired
@@ -36,14 +38,14 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     @Transactional
-    public PatientDto getPatientById(int id) {
+    public PatientDto get(long id) {
         PatientEntity patientEntity = patientDao.get(id);
         return new PatientDto(patientEntity);
     }
 
     @Override
     @Transactional
-    public void deletePatient(int id) {
+    public void delete(long id) {
         patientDao.remove(id);
     }
 

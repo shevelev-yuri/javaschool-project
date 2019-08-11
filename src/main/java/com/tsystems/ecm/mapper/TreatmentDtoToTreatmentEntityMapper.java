@@ -9,6 +9,7 @@ public class TreatmentDtoToTreatmentEntityMapper {
 
     public TreatmentEntity map(TreatmentDto src) {
         TreatmentEntity dst = new TreatmentEntity();
+
         dst.setTreatmentName(src.getTreatmentName());
         dst.setTreatmentType(src.getTreatmentType());
 

@@ -10,22 +10,43 @@
 <h2>Patient: ${patient.name}</h2>
 <br>
 <h2>Add new appointment</h2>
+<%--@elvariable id="appointment" type="com.tsystems.ecm.dto.AppointmentDto"--%>
 <form:form action="add" method="post" modelAttribute="appointment">
     <div>
-        <form:select path="treatment">
-            <form:option value="" selected="selected" disabled="true" hidden="true" label="Select treatment.."/>
-            <form:options items="${treatments}" itemLabel="treatmentName"/>
-            <%--<c:forEach var="treatment" items="${treatments}">
-                <form:option value="${treatment}" label="${treatment.treatmentName}"/>
-            </c:forEach>--%>
-        </form:select>
+        <select name="treatmentId">
+            <option value="" hidden selected disabled>Select treatment..</option>
+            <optgroup label="Procedures">
+                <c:forEach items="${procedures}" var="var">
+                    <option value="${var.id}">${var.treatmentName}</option>
+                </c:forEach>
+            </optgroup>
+            <optgroup label="Medications">
+                <c:forEach items="${medications}" var="var">
+                    <option value="${var.id}">${var.treatmentName}</option>
+                </c:forEach>
+            </optgroup>
+        </select>
     </div>
     <br>
     <br>
-    <form:checkboxes path="regimen" items="${weekdays}" element="div"/>
+    <c:forEach items="${weekdays}" var="day">
+        <label><input type="checkbox" name="days[]" value="${day}">${day}</label><br>
+    </c:forEach>
     <br>
     <br>
-    <label><input type="number" name="weeks" step="1" min="1" max="50">Weeks</label>
+    <c:forEach items="${timesOfDay}" var="time">
+        <label><input type="checkbox" name="times[]" value="${time}">${time}</label><br>
+    </c:forEach>
+    <br>
+    <br>
+    <form:label path="duration">Duration (weeks)</form:label>
+    <form:input path="duration"/>
+    <br>
+    <br>
+    <form:label path="dose">Dose (for medication only)</form:label>
+    <form:input path="dose"/>
+    <input type="hidden" name="patientId" value="${patient.id}" />
+    <br>
     <br>
     <button type="submit">Add appointment</button>
 </form:form>
