@@ -4,9 +4,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <%@include file="/WEB-INF/views/layouts/_head.jsp" %>
+
     <title>Form: add appointment</title>
 </head>
 <body>
+<%@include file="/WEB-INF/views/layouts/_header.jsp" %>
+
 <h2>Patient: ${patient.name}</h2>
 <br>
 <a href="/ecm/patients">Back to patients list</a>
@@ -52,5 +56,7 @@
     <br>
     <button type="submit">Add appointment</button>
 </form:form>
+<%@ include file="/WEB-INF/views/layouts/_footer.jsp" %>
+
 </body>
 </html>

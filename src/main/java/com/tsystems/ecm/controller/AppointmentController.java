@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.DayOfWeek;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
@@ -119,10 +120,12 @@ public class AppointmentController {
         }
 
         appointment.setRegimen(regimenStringBuilder.toString());
+        appointment.setId(appointmentService.addAppointment(appointment));
+
         List<EventDto> events = regimenProcessorService.parseRegimen(appointment, true);
+        events.forEach(event -> event.setAppointmentIdCreatedBy(appointment.getId()));
         eventService.addEvents(events);
 
-        appointment.setId(appointmentService.addAppointment(appointment));
         if (log.isDebugEnabled()) log.debug("Created new appointment. {}", appointment.toString());
 
         return new ModelAndView("redirect:/appointments/appointments");
@@ -147,4 +150,21 @@ public class AppointmentController {
 
         return "appointments/appointments";
     }
+
+    @PostMapping("/delete")
+    public ModelAndView deleteSelected(@RequestParam("appointmentId") String appointmentId,
+                                       @RequestParam("patientId") String patientId,
+                                       RedirectAttributes redirectAttributes) {
+        ModelAndView mv = new ModelAndView ("redirect:/appointments/appointments");
+        long id = Long.parseLong(appointmentId);
+
+        eventService.setCancelledDueToAppointmentCancelling(id);
+        appointmentService.cancelAppointmentById(id);
+        PatientDto patient = patientService.get(Long.parseLong(patientId));
+
+        redirectAttributes.addFlashAttribute("patient", patient);
+
+        return mv;
+    }
+
 }

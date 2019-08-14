@@ -3,6 +3,7 @@ package com.tsystems.ecm.service.impl;
 import com.tsystems.ecm.dao.EventDao;
 import com.tsystems.ecm.dto.EventDto;
 import com.tsystems.ecm.entity.EventEntity;
+import com.tsystems.ecm.entity.enums.EventStatus;
 import com.tsystems.ecm.mapper.EventDtoToEventEntityMapper;
 import com.tsystems.ecm.mapper.EventEntityToEventDtoMapper;
 import com.tsystems.ecm.service.EventService;
@@ -46,6 +47,33 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional
+    public void setAccomplishedById(long id) {
+        eventDao.get(id).setEventStatus(EventStatus.ACCOMPLISHED);
+    }
+
+    @Override
+    @Transactional
+    public void setCancelledById(long id) {
+        eventDao.get(id).setEventStatus(EventStatus.CANCELLED);
+    }
+
+    @Override
+    @Transactional
+    public void setCancelledDueToAppointmentCancelling(long appointmentId) {
+        List<EventEntity> events = getAllByAppointmentId(appointmentId);
+        events.stream()
+                .filter(event -> event.getEventStatus().equals(EventStatus.SCHEDULED))
+                .forEach(event -> event.setEventStatus(EventStatus.CANCELLED));
+    }
+
+    @Override
+    public List<EventEntity> getAllByAppointmentId(long id) {
+
+        return eventDao.getAllByAppointmentId(id);
+    }
+
+    @Override
+    @Transactional
     public int addEvents(List<EventDto> events) {
         for (EventDto event : events) {
             EventEntity entity = mapperDtoToEntity.map(event);
@@ -54,5 +82,4 @@ public class EventServiceImpl implements EventService {
 
         return events.size();
     }
-
 }

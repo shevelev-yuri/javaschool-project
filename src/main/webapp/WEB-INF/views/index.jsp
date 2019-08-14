@@ -3,28 +3,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Title</title>
+    <meta charset="utf-8">
+    <%@include file="layouts/_head.jsp" %>
+
+    <title>Home page</title>
 </head>
 <body>
-<h1>Welcome to ECM-system Web Application Home</h1>
-<br>
+<%@include file="layouts/_header.jsp" %>
 
-<c:choose>
-    <c:when test="${not cookie.containsKey('AUTH_SESSION')}">
-        <div>
-            <a href="login">Login page</a>
-        </div>
-    </c:when>
-    <c:otherwise>
+<main role="main" class="container">
+    <h1>Welcome to ECM Web application</h1>
+    <br>
+
+    <c:choose>
+        <c:when test="${not cookie.containsKey('AUTH_SESSION')}">
+            <div>
+                <a href="login">Login page</a>
+            </div>
+        </c:when>
+        <c:otherwise>
             <div>
                 <p>Hello, ${cookie.userName == null ? "undefined" : cookie.userName.value}!</p>
             </div>
-    </c:otherwise>
-</c:choose>
-<br>
-<div>
-    <a href="/ecm/patients">View all patients</a>
-</div>
+        </c:otherwise>
+    </c:choose>
+    <br>
+    <div>
+        <a href="/ecm/patients">View all patients</a>
+    </div>
+</main>
 
+<%@ include file="layouts/_footer.jsp" %>
 </body>
 </html>

@@ -16,6 +16,7 @@ public class EventDao extends AbstractDao<EventEntity> {
     private static final Logger log = LogManager.getLogger(EventDao.class);
 
     private static final String SELECT_ALL_EVENTS_BY_PATIENT_ID = "select * from events where patient_id = ?";
+    private static final String SELECT_ALL_EVENTS_BY_APPOINTMENT_ID = "select * from events where appointmentIdCreatedBy = ?";
     private static final String SELECT_ALL_EVENTS = "FROM EventEntity";
 
     public void save(EventEntity event) {
@@ -26,14 +27,33 @@ public class EventDao extends AbstractDao<EventEntity> {
         return getSessionFactory().getCurrentSession().get(EventEntity.class, id);
     }
 
-    public List<EventEntity> getAllByPatientId(long id) {
+    public List<EventEntity> getAll() {
+        return getSessionFactory().getCurrentSession().createQuery(SELECT_ALL_EVENTS, EventEntity.class).getResultList();
+    }
+
+    public List<EventEntity> getAllByPatientId(long patientId) {
+        List<EventEntity> events = getByQuery(SELECT_ALL_EVENTS_BY_PATIENT_ID, patientId);
+        log.info("All events for patient with id: {} found!", patientId);
+
+        return events;
+    }
+
+    public List<EventEntity> getAllByAppointmentId(long appointmentId) {
+        List<EventEntity> events = getByQuery(SELECT_ALL_EVENTS_BY_APPOINTMENT_ID, appointmentId);
+        log.info("All events, created by appointment with id {} found!", appointmentId);
+
+        return events;
+    }
+
+
+    private List<EventEntity> getByQuery(String queryString, long id) {
         Query query = getSessionFactory().getCurrentSession()
-                .createNativeQuery(SELECT_ALL_EVENTS_BY_PATIENT_ID, EventEntity.class)
+                .createNativeQuery(queryString, EventEntity.class)
                 .setParameter(1, id);
 
-        List<EventEntity> appointments;
+        List<EventEntity> events;
         try {
-            appointments = (List<EventEntity>) query.getResultList();
+            events = (List<EventEntity>) query.getResultList();
         } catch (NoResultException nre) {
             //TODO handle
             log.debug(nre.getMessage());
@@ -45,18 +65,8 @@ public class EventDao extends AbstractDao<EventEntity> {
 
             return Collections.emptyList();
         }
-        log.info("All appointments for patient with id: {} found!", id);
-        if (log.isInfoEnabled()) {
-            for (EventEntity event : appointments) {
-                log.info(event.toString());
-            }
-        }
 
-        return appointments;
-    }
-
-    public List<EventEntity> getAll() {
-        return getSessionFactory().getCurrentSession().createQuery(SELECT_ALL_EVENTS, EventEntity.class).getResultList();
+        return events;
     }
 }
 

@@ -4,9 +4,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <%@include file="/WEB-INF/views/layouts/_head.jsp" %>
+
     <title>Form: add patients</title>
 </head>
 <body>
+<%@include file="/WEB-INF/views/layouts/_header.jsp" %>
+
 <h2>Add new patients</h2>
 <%--@elvariable id="patient" type="com.tsystems.ecm.dto.PatientDto"--%>
 <form:form action="add" method="post" modelAttribute="patient">
@@ -42,5 +46,6 @@
     <br>
     <button type="submit">Add patient</button>
 </form:form>
+<%@ include file="/WEB-INF/views/layouts/_footer.jsp" %>
 </body>
 </html>

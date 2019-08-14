@@ -54,38 +54,35 @@ public class RegimenProcessorServiceImpl implements RegimenProcessorService {
         String[] times = null;
         String timeString;
         String dayString;
-        int numOfEvents;
         String regimenString;
 
         //If time of day is not present
         if (!regimen.contains("_")) {
             days = regimen.split(" ");
-            numOfEvents = days.length;
 
             if (days.length == 7) {
                 regimenString = EVERY_DAY;
             } else if (days.length == 1) {
-                regimenString = ONCE_A_WEEK;
+                regimenString = ONCE_A_WEEK + ON + days[0];
             } else {
                 dayString = transformString(days);
                 regimenString = days.length + " " + TIMES_A_WEEK + ON + dayString;
             }
         }
-        // If time of day present
+        // If time of day is present
         else {
-            days = regimen.substring(0, regimen.indexOf("_")).split(" ");
-            times = regimen.substring(regimen.indexOf("_") + 1).split(" ");
+            days = regimen.substring(0, regimen.indexOf('_')).split(" ");
+            times = regimen.substring(regimen.indexOf('_') + 1).split(" ");
 
             timeString = transformString(times);
-
-            numOfEvents = days.length * times.length;
 
             if (days.length == 7) {
                 regimenString = EVERY_DAY + " " + timeString;
             } else if (days.length == 1) {
-                regimenString = ONCE_A_WEEK + " " + timeString;
+                regimenString = ONCE_A_WEEK + ON + days[0] + " " + timeString;
             } else {
-                regimenString = days.length + " " + TIMES_A_WEEK + " " + timeString;
+                dayString = transformString(days);
+                regimenString = days.length + " " + TIMES_A_WEEK + ON + dayString + " " + timeString;
             }
         }
 
@@ -94,45 +91,11 @@ public class RegimenProcessorServiceImpl implements RegimenProcessorService {
 
 
         if (generateEvents) {
-            List<EventDto> events = new ArrayList<>(numOfEvents);
-            List<LocalDateTime> nextEventsDateTimes = new ArrayList<>(numOfEvents);
 
-            //Parse times[] to List<LocalTime>, if present
-            List<LocalTime> localTimes = null;
-            if (times != null) {
-                localTimes = new ArrayList<>(times.length);
-                for (String time : times) {
-                    if ("Morning".equals(time)) {
-                        localTimes.add(LocalTime.parse("09:00:00"));
-                    } else if ("Afternoon".equals(time)) {
-                        localTimes.add(LocalTime.parse(("14:00:00")));
-                    } else if ("Evening".equals(time)) {
-                        localTimes.add(LocalTime.parse(("19:00:00")));
-                    }
-                }
-            }
+            List<EventDto> events = new ArrayList<>();
+            List<LocalDateTime> nextEventsDateTimes = new ArrayList<>();
 
-            //Create the right number of LocalDateTime instances for each day (and for each time of day, if present)
-            LocalDate today = LocalDate.now();
-            for (int i = 0; i < duration; i++) {
-                for (String day : days) {
-                    if (times != null) {
-                        for (LocalTime localTime : localTimes) {
-                            LocalDateTime toAdd = LocalDateTime.of(today
-                                    .with(next(DayOfWeek.valueOf(day.toUpperCase()))), localTime);
-                            nextEventsDateTimes.add(toAdd);
-                        }
-                    } else {
-                        LocalDateTime toAdd = LocalDateTime.from(today
-                                .with(next(DayOfWeek.valueOf(day.toUpperCase())))
-                                .atTime(0, 0, 0, 0));
-                        nextEventsDateTimes.add(toAdd);
-                    }
-
-                }
-                nextEventsDateTimes.sort(LocalDateTime::compareTo);
-                today = LocalDate.from(nextEventsDateTimes.get(nextEventsDateTimes.size() - 1));
-            }
+            createEvents(days, times, duration, nextEventsDateTimes);
 
             for (LocalDateTime eventDay : nextEventsDateTimes) {
                 EventDto eventDto = new EventDto();
@@ -152,6 +115,10 @@ public class RegimenProcessorServiceImpl implements RegimenProcessorService {
 
     private String transformString(String[] src) {
         StringBuilder dst = new StringBuilder();
+        if (src.length == 1) {
+            return src[0];
+        }
+
         for (int i = 0; i < src.length - 1; i++) {
             if (i < src.length - 2) {
                 dst.append(src[i]).append(", ");
@@ -160,5 +127,45 @@ public class RegimenProcessorServiceImpl implements RegimenProcessorService {
             }
         }
         return dst.toString();
+    }
+
+    private void createEvents(String[] days, String[] times, int duration, List<LocalDateTime> nextEventsDateTimes) {
+        //Parse times[] to List<LocalTime>, if present
+        List<LocalTime> localTimes = null;
+        if (times != null) {
+            localTimes = new ArrayList<>(times.length);
+            for (String time : times) {
+                if ("Morning".equals(time)) {
+                    localTimes.add(LocalTime.parse("09:00:00"));
+                } else if ("Afternoon".equals(time)) {
+                    localTimes.add(LocalTime.parse(("14:00:00")));
+                } else if ("Evening".equals(time)) {
+                    localTimes.add(LocalTime.parse(("19:00:00")));
+                }
+            }
+        }
+
+        //Create the right number of LocalDateTime instances for each day (and for each time of day, if present)
+        LocalDate today = LocalDate.now();
+        for (int i = 0; i < duration; i++) {
+            for (String day : days) {
+                if (times != null) {
+                    for (LocalTime localTime : localTimes) {
+                        LocalDateTime toAdd = LocalDateTime.of(today
+                                .with(next(DayOfWeek.valueOf(day.toUpperCase()))), localTime);
+                        nextEventsDateTimes.add(toAdd);
+                    }
+                } else {
+                    LocalDateTime toAdd = LocalDateTime.from(today
+                            .with(next(DayOfWeek.valueOf(day.toUpperCase())))
+                            .atTime(0, 0, 0, 0));
+                    nextEventsDateTimes.add(toAdd);
+                }
+
+            }
+            nextEventsDateTimes.sort(LocalDateTime::compareTo);
+            today = LocalDate.from(nextEventsDateTimes.get(nextEventsDateTimes.size() - 1));
+        }
+
     }
 }

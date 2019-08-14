@@ -16,6 +16,8 @@ public class EventDto {
 
     private TreatmentDto treatment;
 
+    private long appointmentIdCreatedBy;
+
     public long getId() {
         return id;
     }
@@ -56,6 +58,14 @@ public class EventDto {
         this.treatment = treatment;
     }
 
+    public long getAppointmentIdCreatedBy() {
+        return appointmentIdCreatedBy;
+    }
+
+    public void setAppointmentIdCreatedBy(long appointmentIdCreatedBy) {
+        this.appointmentIdCreatedBy = appointmentIdCreatedBy;
+    }
+
     @Override
     public String toString() {
         return "EventDto{" +
@@ -64,6 +74,7 @@ public class EventDto {
                 ", scheduledDatetime=" + scheduledDatetime +
                 ", eventStatus=" + eventStatus +
                 ", treatment=" + treatment.toString() +
+                ", appointmentIdCreatedBy=" + appointmentIdCreatedBy +
                 '}';
     }
 }

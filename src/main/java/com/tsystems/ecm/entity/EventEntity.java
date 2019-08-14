@@ -26,6 +26,8 @@ public class EventEntity {
     @JoinColumn(name = "treatment_id")
     private TreatmentEntity treatment;
 
+    private long appointmentIdCreatedBy;
+
     public long getId() {
         return id;
     }
@@ -64,5 +66,13 @@ public class EventEntity {
 
     public void setTreatment(TreatmentEntity treatment) {
         this.treatment = treatment;
+    }
+
+    public long getAppointmentIdCreatedBy() {
+        return appointmentIdCreatedBy;
+    }
+
+    public void setAppointmentIdCreatedBy(long appointmentIdCreatedBy) {
+        this.appointmentIdCreatedBy = appointmentIdCreatedBy;
     }
 }

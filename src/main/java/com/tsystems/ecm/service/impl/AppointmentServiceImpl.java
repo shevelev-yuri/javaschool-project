@@ -59,4 +59,17 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         return entities.stream().map(toAppointmentDtoMapper::map).collect(Collectors.toList());
     }
+
+    /**
+     * Permanently removes appointment from database
+     *
+     * @param id the id of the appointment to be removed
+     */
+    @Override
+    @Transactional
+    public void cancelAppointmentById(long id) {
+        AppointmentEntity appointmentToDelete = appointmentDao.get(id);
+        appointmentDao.delete(appointmentToDelete);
+    }
+
 }

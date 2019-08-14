@@ -28,6 +28,7 @@ public class EventDtoToEventEntityMapper {
         dst.getTreatment().setId(src.getTreatment().getId());
         dst.setEventStatus(src.getEventStatus());
         dst.setScheduledDatetime(src.getScheduledDatetime());
+        dst.setAppointmentIdCreatedBy(src.getAppointmentIdCreatedBy());
 
         return dst;
     }

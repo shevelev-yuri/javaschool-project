@@ -3,9 +3,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <%@include file="/WEB-INF/views/layouts/_head.jsp" %>
+
     <title>Patients</title>
 </head>
 <body>
+<%@include file="/WEB-INF/views/layouts/_header.jsp" %>
+
 <a href="/ecm/patients/add">Add new patient</a>
 <br>
 <br>
@@ -35,11 +39,18 @@
             <td>${patient.diagnosis}</td>
             <td>${patient.insuranceNumber}</td>
             <td>${patient.doctorName}</td>
-            <td>${patient.patientStatus}</td>
+            <td>${patient.patientStatus == 'ON_TREATMENT' ? "On treatment" : "Discharged"}</td>
             <td>
-                <form method="get" action="appointments/add">
-                    <button type="submit" name="patientId" value="${patient.id}">Add appointment</button>
-                </form>
+                <c:choose>
+                    <c:when test="${patient.patientStatus == 'ON_TREATMENT'}">
+                        <form method="get" action="appointments/add">
+                            <button type="submit" name="patientId" value="${patient.id}">Add appointment</button>
+                        </form>
+                    </c:when>
+                    <c:otherwise>
+                        <button type="button" disabled>Add appointment</button>
+                    </c:otherwise>
+                </c:choose>
             </td>
             <td>
                 <form method="get" action="events/events">
@@ -47,18 +58,33 @@
                 </form>
             </td>
             <td>
-                <form method="get" action="appointments/appointments">
-                    <button type="submit" name="patientId" value="${patient.id}">View appointments</button>
-                </form>
+                <c:choose>
+                    <c:when test="${patient.patientStatus == 'ON_TREATMENT'}">
+                        <form method="get" action="appointments/appointments">
+                            <button type="submit" name="patientId" value="${patient.id}">View appointments</button>
+                        </form>
+                    </c:when>
+                    <c:otherwise>
+                        <button type="button" disabled>View appointments</button>
+                    </c:otherwise>
+                </c:choose>
             </td>
             <td>
-                <form method="get" action="appointments/discharge">
-                    <button type="submit" name="patientId" value="${patient.id}">Discharge</button>
-                </form>
+                <c:choose>
+                    <c:when test="${patient.patientStatus == 'ON_TREATMENT'}">
+                        <form method="get" action="patients/discharge">
+                            <button type="submit" name="patientId" value="${patient.id}">Discharge</button>
+                        </form>
+                    </c:when>
+                    <c:otherwise>
+                        <button type="button" disabled>Discharge</button>
+                    </c:otherwise>
+                </c:choose>
             </td>
         </tr>
     </c:forEach>
     </tbody>
 </table>
+<%@ include file="/WEB-INF/views/layouts/_footer.jsp" %>
 </body>
 </html>

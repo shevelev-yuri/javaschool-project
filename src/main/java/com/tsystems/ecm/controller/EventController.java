@@ -1,33 +1,35 @@
 package com.tsystems.ecm.controller;
 
 import com.tsystems.ecm.dto.EventDto;
+import com.tsystems.ecm.dto.PatientDto;
 import com.tsystems.ecm.service.EventService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.tsystems.ecm.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Controller
 @RequestMapping("/events")
 public class EventController {
 
-    private static final Logger log = LogManager.getLogger(EventController.class);
-
     private EventService eventService;
 
+    private PatientService patientService;
+
     @Autowired
-    public EventController(EventService eventService) {
+    public EventController(EventService eventService,
+                           PatientService patientService) {
         this.eventService = eventService;
+        this.patientService = patientService;
     }
 
     @GetMapping("/events")
-    public ModelAndView events(@RequestParam(value = "patientId", required = false) String patientId ) {
+    public ModelAndView events(@RequestParam(value = "patientId", required = false) String patientId) {
         ModelAndView mv = new ModelAndView("events/events");
         List<EventDto> events;
         if (patientId != null && !patientId.isEmpty()) {
@@ -35,9 +37,36 @@ public class EventController {
         } else {
             events = eventService.getAll();
         }
+        events.sort(Comparator.comparing(EventDto::getScheduledDatetime));
         mv.addObject("events", events);
 
         return mv;
     }
+
+    @PostMapping("/accomplished")
+    public ModelAndView eventAccomplished(@RequestParam("patientId") String patientId,
+                                          @RequestParam("eventId") String eventId,
+                                          RedirectAttributes redirectAttributes) {
+        ModelAndView mv = new ModelAndView("redirect:events");
+
+        PatientDto patient = patientService.get(Long.parseLong(patientId));
+
+        redirectAttributes.addFlashAttribute("patient", patient);
+
+        eventService.setAccomplishedById(Long.parseLong(eventId));
+
+        return mv;
+    }
+
+    @PostMapping("/cancelled")
+    public ModelAndView eventCancelled(@RequestParam("patientId") String patientId,
+                                       @RequestParam("eventId") String eventId) {
+        ModelAndView mv = new ModelAndView("redirect:events");
+
+        eventService.setCancelledById(Long.parseLong(eventId));
+
+        return mv;
+    }
+
 
 }

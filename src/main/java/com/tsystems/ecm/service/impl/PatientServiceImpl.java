@@ -3,6 +3,7 @@ package com.tsystems.ecm.service.impl;
 import com.tsystems.ecm.dao.PatientDao;
 import com.tsystems.ecm.dto.PatientDto;
 import com.tsystems.ecm.entity.PatientEntity;
+import com.tsystems.ecm.entity.enums.PatientStatus;
 import com.tsystems.ecm.mapper.PatientDtoToPatientEntityMapper;
 import com.tsystems.ecm.mapper.PatientEntityToPatientDtoMapper;
 import com.tsystems.ecm.service.PatientService;
@@ -55,5 +56,11 @@ public class PatientServiceImpl implements PatientService {
         PatientEntity patientEntity = mapperDtoToEntity.map(patient);
         patientDao.save(patientEntity);
         return patientEntity.getId();
+    }
+
+    @Override
+    @Transactional
+    public void dischargePatient(long id) {
+        patientDao.get(id).setPatientStatus(PatientStatus.DISCHARGED);
     }
 }

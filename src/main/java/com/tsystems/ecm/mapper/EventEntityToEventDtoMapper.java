@@ -29,7 +29,7 @@ public class EventEntityToEventDtoMapper {
 
         dst.setScheduledDatetime(src.getScheduledDatetime());
         dst.setEventStatus(src.getEventStatus());
-
+        dst.setAppointmentIdCreatedBy(src.getAppointmentIdCreatedBy());
 
         return dst;
     }

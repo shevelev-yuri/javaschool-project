@@ -1,8 +1,11 @@
 package com.tsystems.ecm.controller;
 
 
+import com.tsystems.ecm.dto.AppointmentDto;
 import com.tsystems.ecm.dto.PatientDto;
 import com.tsystems.ecm.dto.UserDto;
+import com.tsystems.ecm.service.AppointmentService;
+import com.tsystems.ecm.service.EventService;
 import com.tsystems.ecm.service.PatientService;
 import com.tsystems.ecm.service.UserService;
 import org.apache.logging.log4j.LogManager;
@@ -11,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -29,12 +29,21 @@ public class PatientController {
 
     private PatientService patientService;
 
+    private AppointmentService appointmentService;
+
     private UserService userService;
 
+    private EventService eventService;
+
     @Autowired
-    public PatientController(PatientService patientService, UserService userService) {
+    public PatientController(PatientService patientService,
+                             AppointmentService appointmentService,
+                             UserService userService,
+                             EventService eventService) {
         this.patientService = patientService;
+        this.appointmentService = appointmentService;
         this.userService = userService;
+        this.eventService = eventService;
     }
 
     @GetMapping("")
@@ -69,4 +78,33 @@ public class PatientController {
 
         return new ModelAndView("redirect:/appointments/add");
     }
+
+    @GetMapping("/discharge")
+    public ModelAndView dischargeConfirmation(@RequestParam("patientId") String patientId) {
+        ModelAndView mv = new ModelAndView("discharge");
+        long id = Long.parseLong(patientId);
+        PatientDto patient = patientService.get(id);
+        mv.addObject("patient", patient);
+
+        List<AppointmentDto> appointments = appointmentService.getAllByPatientId(id);
+        mv.addObject("appointments", appointments);
+
+        return mv;
+    }
+
+    @PostMapping("/discharge")
+    public ModelAndView dischargeConfirmed(@RequestParam("patientId") String patientId) {
+        ModelAndView mv = new ModelAndView("redirect:patients");
+
+        long id = Long.parseLong(patientId);
+
+        List<AppointmentDto> appointments = appointmentService.getAllByPatientId(id);
+        appointments.forEach(appointment -> eventService.setCancelledDueToAppointmentCancelling(appointment.getId()));
+        appointments.forEach(appointment -> appointmentService.cancelAppointmentById(appointment.getId()));
+
+        patientService.dischargePatient(id);
+
+        return mv;
+    }
+
 }

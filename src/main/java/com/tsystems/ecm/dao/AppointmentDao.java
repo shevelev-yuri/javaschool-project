@@ -17,6 +17,10 @@ public class AppointmentDao extends AbstractDao<AppointmentEntity> {
 
     private static final String SELECT_APPOINTMENTS_BY_PATIENT_ID = "select * from appointments where patient_id = ?";
 
+    public AppointmentEntity get(long id) {
+        return getSessionFactory().getCurrentSession().get(AppointmentEntity.class, id);
+    }
+
     public void save(AppointmentEntity appointment) {
         persist(appointment);
     }
