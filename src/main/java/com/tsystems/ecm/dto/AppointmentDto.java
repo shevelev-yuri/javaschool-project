@@ -14,6 +14,8 @@ public class AppointmentDto {
 
     private String regimen;
 
+    private String regimenString;
+
     private int duration;
 
     private String dose;
@@ -56,6 +58,14 @@ public class AppointmentDto {
 
     public void setRegimen(String regimen) {
         this.regimen = regimen;
+    }
+
+    public String getRegimenString() {
+        return regimenString;
+    }
+
+    public void setRegimenString(String regimenString) {
+        this.regimenString = regimenString;
     }
 
     public int getDuration() {

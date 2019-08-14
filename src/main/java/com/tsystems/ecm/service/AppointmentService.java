@@ -9,4 +9,5 @@ public interface AppointmentService {
     long addAppointment(AppointmentDto appointmentDto);
 
     List<AppointmentDto> getAllByPatientId(long id);
+
 }

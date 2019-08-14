@@ -14,27 +14,37 @@ public class TreatmentDao extends AbstractDao<TreatmentEntity> {
 
     private static final Logger log = LogManager.getLogger(TreatmentDao.class);
 
-    private static final String SELECT_ALL_TREATMENT_ENTITY = "FROM TreatmentEntity";
+    private static final String SELECT_ALL_TREATMENTS = "FROM TreatmentEntity";
 
     private static final String SELECT_TREATMENT_BY_ID = "FROM TreatmentEntity WHERE id = ?1";
 
     public List<TreatmentEntity> getAll() {
-        return getSessionFactory().getCurrentSession().createQuery(SELECT_ALL_TREATMENT_ENTITY, TreatmentEntity.class).getResultList();
+        return getSessionFactory().getCurrentSession()
+                .createQuery(SELECT_ALL_TREATMENTS, TreatmentEntity.class)
+                .getResultList();
     }
 
     public TreatmentEntity get(long id) {
-        Query query = getSessionFactory().getCurrentSession().createQuery(SELECT_TREATMENT_BY_ID, TreatmentEntity.class).setParameter(1, id);
+        Query query = getSessionFactory().getCurrentSession()
+                .createQuery(SELECT_TREATMENT_BY_ID, TreatmentEntity.class)
+                .setParameter(1, id);
+
         TreatmentEntity entity;
         try {
             entity = (TreatmentEntity) query.getSingleResult();
         } catch (NoResultException nre) {
+            //TODO handle
             log.debug(nre.getMessage());
+
             return null;
         } catch (Exception e) {
+            //TODO handle
             log.warn(e.getMessage());
+
             return null;
         }
         log.debug("Treatment with ID \"{}\" found!", id);
+
         return entity;
     }
 }

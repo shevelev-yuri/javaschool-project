@@ -9,6 +9,8 @@
 <body>
 <h2>Patient: ${patient.name}</h2>
 <br>
+<a href="/ecm/patients">Back to patients list</a>
+<br>
 <h2>Add new appointment</h2>
 <%--@elvariable id="appointment" type="com.tsystems.ecm.dto.AppointmentDto"--%>
 <form:form action="add" method="post" modelAttribute="appointment">

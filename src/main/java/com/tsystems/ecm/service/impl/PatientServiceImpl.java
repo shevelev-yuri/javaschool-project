@@ -31,7 +31,7 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     @Transactional
-    public List<PatientDto> getAllPatients() {
+    public List<PatientDto> getAll() {
         List<PatientEntity> entities = patientDao.getAll();
         return entities.stream().map(mapperEntityToDto::map).collect(Collectors.toList());
     }

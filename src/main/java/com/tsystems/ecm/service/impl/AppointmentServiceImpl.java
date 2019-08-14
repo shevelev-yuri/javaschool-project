@@ -6,8 +6,6 @@ import com.tsystems.ecm.entity.AppointmentEntity;
 import com.tsystems.ecm.mapper.AppointmentDtoToAppointmentEntityMapper;
 import com.tsystems.ecm.mapper.AppointmentEntityToAppointmentDtoMapper;
 import com.tsystems.ecm.service.AppointmentService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +15,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class AppointmentServiceImpl implements AppointmentService {
-
-    private static final Logger log = LogManager.getLogger(AppointmentServiceImpl.class);
 
     private AppointmentDao appointmentDao;
 

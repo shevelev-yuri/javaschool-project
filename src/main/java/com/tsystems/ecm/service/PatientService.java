@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface PatientService {
 
-    List<PatientDto> getAllPatients();
+    List<PatientDto> getAll();
 
     PatientDto get(long id);
 

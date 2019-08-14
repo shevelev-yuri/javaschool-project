@@ -2,7 +2,6 @@ package com.tsystems.ecm.service.impl;
 
 import com.tsystems.ecm.dao.TreatmentDao;
 import com.tsystems.ecm.dto.TreatmentDto;
-import com.tsystems.ecm.entity.TreatmentEntity;
 import com.tsystems.ecm.mapper.TreatmentEntityToTreatmentDtoMapper;
 import com.tsystems.ecm.service.TreatmentService;
 import org.springframework.beans.factory.annotation.Autowired;
