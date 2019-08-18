@@ -30,7 +30,7 @@ public class RegimenProcessorServiceImpl implements RegimenProcessorService {
     private static final String TIMES_A_WEEK = "times a week";
     private static final String AND = " and ";
     private static final String FOR = " for ";
-    private static final String WEEKS = " week(s).";
+    private static final String WEEKS = " week(s)";
     private static final String ONCE_A_WEEK = "Once a week";
     private static final String ON = " on ";
 
@@ -49,6 +49,9 @@ public class RegimenProcessorServiceImpl implements RegimenProcessorService {
 
             return Collections.emptyList();
         }
+
+        //TODO add a map to check if this regimen has been parsed before and take regimenString from there,
+        // if not - parse it and add it to map
 
         String[] days;
         String[] times = null;

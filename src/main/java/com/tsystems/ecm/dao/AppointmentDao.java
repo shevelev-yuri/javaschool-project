@@ -25,6 +25,10 @@ public class AppointmentDao extends AbstractDao<AppointmentEntity> {
         persist(appointment);
     }
 
+    public void update(AppointmentEntity appointment) {
+        getSessionFactory().getCurrentSession().update(appointment);
+    }
+
     public List<AppointmentEntity> getAllByPatientId(long id) {
         Query query = getSessionFactory().getCurrentSession()
                 .createNativeQuery(SELECT_APPOINTMENTS_BY_PATIENT_ID, AppointmentEntity.class)

@@ -32,17 +32,40 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     /**
-     * Calls the appropriate DAO to save the {@code appointmentDto} and returns its {@code id}.
+     * Calls the appropriate DAO to save or update the {@code appointmentDto} and returns its {@code id}.
      *
-     * @param appointmentDto Appointment DTO to be saved in database
-     * @return the {@code id} of saved appointment entity
+     * @param appointmentDto Appointment DTO to be saved or updated in database
+     * @return the {@code id} of saved or updated appointment entity.
      */
     @Override
     @Transactional
-    public long addAppointment(AppointmentDto appointmentDto) {
-        AppointmentEntity appointmentEntity = toAppointmentEntityMapper.map(appointmentDto);
-        appointmentDao.save(appointmentEntity);
-        return appointmentEntity.getId();
+    public long addOrUpdateAppointment(AppointmentDto appointmentDto) {
+        AppointmentEntity appointment;
+        if (appointmentDto.getId() != 0) {
+            appointment = appointmentDao.get(appointmentDto.getId());
+            AppointmentEntity src = toAppointmentEntityMapper.map(appointmentDto);
+            appointment.setPatient(src.getPatient());
+            appointment.setTreatment(src.getTreatment());
+            appointment.setRegimen(src.getRegimen());
+            appointment.setDuration(src.getDuration());
+            appointment.setDose(src.getDose());
+        } else {
+            appointment = toAppointmentEntityMapper.map(appointmentDto);
+        }
+        appointmentDao.save(appointment);
+        return appointment.getId();
+    }
+
+    /**
+     * Calls the appropriate DAO to retrieve the appointment by its {@code id}.
+     *
+     * @param id the id of the appointment
+     * @return requested Appointment DTO
+     */
+    @Override
+    @Transactional
+    public AppointmentDto get(long id) {
+        return toAppointmentDtoMapper.map(appointmentDao.get(id));
     }
 
     /**
@@ -61,13 +84,14 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     /**
-     * Permanently removes appointment from database
+     * Permanently removes appointment from database.
      *
      * @param id the id of the appointment to be removed
      */
     @Override
     @Transactional
     public void cancelAppointmentById(long id) {
+        //TODO change logic - implement status change instead of removal
         AppointmentEntity appointmentToDelete = appointmentDao.get(id);
         appointmentDao.delete(appointmentToDelete);
     }

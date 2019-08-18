@@ -12,8 +12,6 @@
 
 <h2>All appointments for patient: ${patient.name}</h2>
 <br>
-<a href="/ecm/patients">Back to patients list</a>
-<br>
 <br>
 <table>
     <thead>
@@ -37,13 +35,16 @@
             <td>${appointment.dose}</td>
             <td>
                 <form method="get" action="edit">
-                    <button type="submit" name="appointmentId" value="${appointment.id}">Edit</button>
+                    <input type="hidden" name="patientId" value="${patient.id}"/>
+                    <button type="submit" name="appointmentId" class="table-button" value="${appointment.id}">Edit
+                    </button>
                 </form>
             </td>
             <td>
                 <form method="post" action="delete">
-                    <button type="submit" name="appointmentId" value="${appointment.id}">Cancel</button>
                     <input type="hidden" name="patientId" value="${patient.id}">
+                    <button type="submit" name="appointmentId" class="table-button" value="${appointment.id}">Cancel
+                    </button>
                 </form>
             </td>
         </tr>

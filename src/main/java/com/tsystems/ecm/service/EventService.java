@@ -1,7 +1,6 @@
 package com.tsystems.ecm.service;
 
 import com.tsystems.ecm.dto.EventDto;
-import com.tsystems.ecm.entity.EventEntity;
 
 import java.util.List;
 
@@ -13,9 +12,7 @@ public interface EventService {
 
     int addEvents(List<EventDto> events);
 
-    List<EventEntity> getAllByAppointmentId(long id);
-
-    void setCancelledDueToAppointmentCancelling(long id);
+    void setCancelledByAppointmentId(long appointmentId);
 
     void setAccomplishedById(long id);
 

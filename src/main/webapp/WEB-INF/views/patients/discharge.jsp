@@ -14,26 +14,24 @@
 <h2>Discharge patient confirmation</h2>
 
 <%--@elvariable id="patient" type="com.tsystems.ecm.dto.PatientDto"--%>
-<form>
-    <label><input type="text" disabled value="${patient.name}"/>Patient's name</label>
+    <label>Patient's name: <input type="text" readonly value="${patient.name}"/></label>
     <br>
-    <label><input type="text" disabled value="${patient.diagnosis}"/>Patient's diagnosis</label>
+    <label>Patient's diagnosis: <input type="text" readonly value="${patient.diagnosis}"/></label>
     <br>
-    <label><input type="text" disabled value="${patient.insuranceNumber}"/>Patient's insurance number</label>
+    <label>Patient's insurance number: <input type="text" readonly  value="${patient.insuranceNumber}"/></label>
     <br>
-    <label><input type="text" disabled value="${patient.doctorName}"/>Patient's treating doctor</label>
-</form>
+    <label>Patient's treating doctor: <input type="text" readonly  value="${patient.doctorName}"/></label>
 <br>
 <h4>These appointments will be cancelled:</h4>
-<c:forEach items="appointments" var="appointment" varStatus="i">
-    <div>${i.count}. ${appointment.regimenString}</div><br>
+<c:forEach items="${appointments}" var="var" varStatus="i">
+    <div>${var.regimenString} ${var.treatment.treatmentType == 'MEDICATION' ? ', dose: ' : ""} ${var.treatment.treatmentType == 'MEDICATION' ? var.dose : ""}</div>
 </c:forEach>
 <br>
 <br>
 <form action="discharge" method="post">
     <button type="submit" name="patientId" value="${patient.id}">Discharge patient</button>
 </form>
-<form action="patients" method="get">
+<form action="/ecm/patients" method="get">
     <button type="submit">Cancel</button>
 </form>
 <%@ include file="/WEB-INF/views/layouts/_footer.jsp" %>

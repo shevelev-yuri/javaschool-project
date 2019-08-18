@@ -4,10 +4,7 @@ package com.tsystems.ecm.controller;
 import com.tsystems.ecm.dto.AppointmentDto;
 import com.tsystems.ecm.dto.PatientDto;
 import com.tsystems.ecm.dto.UserDto;
-import com.tsystems.ecm.service.AppointmentService;
-import com.tsystems.ecm.service.EventService;
-import com.tsystems.ecm.service.PatientService;
-import com.tsystems.ecm.service.UserService;
+import com.tsystems.ecm.service.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,15 +32,19 @@ public class PatientController {
 
     private EventService eventService;
 
+    private RegimenProcessorService regimenProcessorService;
+
     @Autowired
     public PatientController(PatientService patientService,
                              AppointmentService appointmentService,
                              UserService userService,
-                             EventService eventService) {
+                             EventService eventService,
+                             RegimenProcessorService regimenProcessorService) {
         this.patientService = patientService;
         this.appointmentService = appointmentService;
         this.userService = userService;
         this.eventService = eventService;
+        this.regimenProcessorService = regimenProcessorService;
     }
 
     @GetMapping("")
@@ -68,7 +69,8 @@ public class PatientController {
                                                      BindingResult result,
                                                      RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
-            return new ModelAndView("add");
+            List<UserDto> doctors = userService.getAllDoctors();
+            return new ModelAndView("patients/add", "doctors", doctors);
         }
 
         patient.setId(patientService.addPatient(patient));
@@ -81,12 +83,13 @@ public class PatientController {
 
     @GetMapping("/discharge")
     public ModelAndView dischargeConfirmation(@RequestParam("patientId") String patientId) {
-        ModelAndView mv = new ModelAndView("discharge");
+        ModelAndView mv = new ModelAndView("patients/discharge");
         long id = Long.parseLong(patientId);
         PatientDto patient = patientService.get(id);
         mv.addObject("patient", patient);
 
         List<AppointmentDto> appointments = appointmentService.getAllByPatientId(id);
+        appointments.forEach(appointment -> regimenProcessorService.parseRegimen(appointment, false));
         mv.addObject("appointments", appointments);
 
         return mv;
@@ -94,12 +97,12 @@ public class PatientController {
 
     @PostMapping("/discharge")
     public ModelAndView dischargeConfirmed(@RequestParam("patientId") String patientId) {
-        ModelAndView mv = new ModelAndView("redirect:patients");
+        ModelAndView mv = new ModelAndView("redirect:/patients");
 
         long id = Long.parseLong(patientId);
 
         List<AppointmentDto> appointments = appointmentService.getAllByPatientId(id);
-        appointments.forEach(appointment -> eventService.setCancelledDueToAppointmentCancelling(appointment.getId()));
+        appointments.forEach(appointment -> eventService.setCancelledByAppointmentId(appointment.getId()));
         appointments.forEach(appointment -> appointmentService.cancelAppointmentById(appointment.getId()));
 
         patientService.dischargePatient(id);

@@ -2,25 +2,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <%@include file="/WEB-INF/views/layouts/_head.jsp" %>
+    <%@include file="layouts/_head.jsp" %>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/login.css"/>
 
-    <title>Title</title>
+    <title>Login page</title>
 </head>
-<body>
-<%@include file="/WEB-INF/views/layouts/_header.jsp" %>
+<%@include file="layouts/_header.jsp" %>
 
-<form action="login" method="post">
-    <div>
-        <label for="login">Login</label>
-        <input id="login" name="login" placeholder="Login" />
-    </div>
+<body class="text-center">
 
-    <div>
-        <label for="password">Password</label>
-        <input id="password" type="password" name="password" placeholder="Password" />
+<form class="form-login" action="login" method="post">
+    <%--    <img class="mb-4" src="" alt="" width="72" height="72">--%>
+    <h1 class="h3 mb-3 font-weight-normal">Please login</h1>
+    <label for="inputLogin" class="sr-only">Login</label>
+    <input type="text" id="inputLogin" name="login" class="form-control" placeholder="Login" required autofocus>
+    <label for="inputPassword" class="sr-only">Password</label>
+    <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
+    <div class="checkbox mb-3">
+        <label>
+            <input type="checkbox" name="rememberMe" value="true"> Remember me
+        </label>
     </div>
-    <button type="submit">Login</button>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
 </form>
 <%@ include file="/WEB-INF/views/layouts/_footer.jsp" %>
+
 </body>
 </html>

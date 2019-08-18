@@ -59,15 +59,14 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional
-    public void setCancelledDueToAppointmentCancelling(long appointmentId) {
+    public void setCancelledByAppointmentId(long appointmentId) {
         List<EventEntity> events = getAllByAppointmentId(appointmentId);
         events.stream()
                 .filter(event -> event.getEventStatus().equals(EventStatus.SCHEDULED))
                 .forEach(event -> event.setEventStatus(EventStatus.CANCELLED));
     }
 
-    @Override
-    public List<EventEntity> getAllByAppointmentId(long id) {
+    private List<EventEntity> getAllByAppointmentId(long id) {
 
         return eventDao.getAllByAppointmentId(id);
     }

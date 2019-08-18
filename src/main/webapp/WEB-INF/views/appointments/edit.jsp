@@ -6,7 +6,7 @@
 <head>
     <%@include file="/WEB-INF/views/layouts/_head.jsp" %>
 
-    <title>Form: add appointment</title>
+    <title>Form: edit appointment</title>
 </head>
 <body>
 <%@include file="/WEB-INF/views/layouts/_header.jsp" %>
@@ -14,9 +14,10 @@
 <h2>Patient: ${patient.name}</h2>
 <br>
 <br>
-<h2>Add new appointment</h2>
-<%--@elvariable id="appointment" type="com.tsystems.ecm.dto.AppointmentDto"--%>
-<form:form action="add" method="post" modelAttribute="appointment">
+<h2>Edit appointment:</h2>
+<div>${oldAppointment.regimenString} ${oldAppointment.treatment.treatmentType == 'MEDICATION' ? ', dose: ' : ""} ${oldAppointment.treatment.treatmentType == 'MEDICATION' ? oldAppointment.dose : ""}</div>
+<%--@elvariable id="newAppointment" type="com.tsystems.ecm.dto.AppointmentDto"--%>
+<form:form action="edit" method="post" modelAttribute="newAppointment">
     <div>
         <select name="treatmentId" class="form-select">
             <option value="" hidden selected disabled>Select treatment..</option>
@@ -48,9 +49,13 @@
         <form:errors path="dose" cssClass="form-input err"/>
 
         <input type="hidden" name="patientId" value="${patient.id}"/>
-        <button type="submit" class="form-submit">Add appointment</button>
+        <input type="hidden" name="oldAppointmentId" value="${oldAppointment.id}"/>
+        <button type="submit" class="form-submit">Save changes</button>
     </div>
 </form:form>
+<form action="${pageContext.request.contextPath}/patients" method="get">
+    <button type="submit" class="form-submit">Cancel</button>
+</form>
 <%@ include file="/WEB-INF/views/layouts/_footer.jsp" %>
 
 </body>

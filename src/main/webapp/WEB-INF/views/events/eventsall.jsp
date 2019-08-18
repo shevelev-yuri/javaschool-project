@@ -1,3 +1,4 @@
+<%--suppress ALL --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
@@ -37,11 +38,11 @@
                     <c:when test="${event.eventStatus == 'SCHEDULED'}">
                         <form method="post" action="accomplished">
                             <input type="hidden" name="patientId" value="${patient.id}">
-                            <button type="submit" class="table-button" name="eventId" value="${event.id}">Done</button>
+                            <button type="submit" name="eventId" value="${event.id}">Done</button>
                         </form>
                     </c:when>
                     <c:otherwise>
-                        <button type="button" class="button-disabled" disabled>Done</button>
+                        <button type="button" disabled>Done</button>
                     </c:otherwise>
                 </c:choose>
             </td>
@@ -50,11 +51,11 @@
                     <c:when test="${event.eventStatus == 'SCHEDULED'}">
                         <form method="post" action="cancelled">
                             <input type="hidden" name="patientId" value="${patient.id}">
-                            <button type="submit" class="table-button" name="eventId" value="${event.id}">Cancel</button>
+                            <button type="submit" name="eventId" value="${event.id}">Cancel</button>
                         </form>
                     </c:when>
                     <c:otherwise>
-                        <button type="button" class="button-disabled" disabled>Cancel</button>
+                        <button type="button" disabled>Cancel</button>
                     </c:otherwise>
                 </c:choose>
             </td>

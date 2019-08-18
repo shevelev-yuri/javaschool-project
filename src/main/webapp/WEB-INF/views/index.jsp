@@ -28,9 +28,6 @@
         </c:otherwise>
     </c:choose>
     <br>
-    <div>
-        <a href="/ecm/patients">View all patients</a>
-    </div>
 </main>
 
 <%@ include file="layouts/_footer.jsp" %>
