@@ -34,6 +34,8 @@ public class AppointmentController {
     private static final String AFTERNOON = "Afternoon";
     private static final String EVENING = "Evening";
 
+    private static final String REDIRECT_APPOINTMENTS = "redirect:/appointments/appointments";
+
     private TreatmentService treatmentService;
 
     private PatientService patientService;
@@ -43,6 +45,7 @@ public class AppointmentController {
     private RegimenProcessorService regimenProcessorService;
 
     private EventService eventService;
+
 
     @Autowired
     public AppointmentController(TreatmentService treatmentService,
@@ -58,7 +61,7 @@ public class AppointmentController {
     }
 
     @GetMapping("/add")
-    public ModelAndView appointmentForm(@ModelAttribute("patient") PatientDto patientPrev,
+    public ModelAndView appointmentForm(@ModelAttribute(PATIENT) PatientDto patientPrev,
                                         @RequestParam(value = "patientId", required = false) String patientId) {
         ModelAndView mv = new ModelAndView("appointments/add");
         PatientDto patient;
@@ -83,11 +86,8 @@ public class AppointmentController {
                                        @RequestParam("days[]") String[] weekdays,
                                        @RequestParam(value = "times[]", required = false) String[] times,
                                        RedirectAttributes redirectAttributes) {
-
         initAppointmentDto(appointment, treatmentId, patientId, weekdays, times, redirectAttributes);
-        /*if (errors) {
-            TODO custom validation
-        }*/
+        //TODO custom validation
         appointment.setId(appointmentService.addOrUpdateAppointment(appointment));
 
         List<EventDto> events = regimenProcessorService.parseRegimen(appointment, true);
@@ -96,19 +96,20 @@ public class AppointmentController {
 
         if (log.isDebugEnabled()) log.debug("Created new appointment. {}", appointment.toString());
 
-        return new ModelAndView("redirect:/appointments/appointments");
+        return new ModelAndView(REDIRECT_APPOINTMENTS);
     }
 
     @GetMapping("/appointments")
-    public String appointments(@ModelAttribute("patient") PatientDto patientPrev,
+    public String appointments(@ModelAttribute(PATIENT) PatientDto patientPrev,
                                @RequestParam(value = "patientId", required = false) String patientId,
                                Model model) {
         PatientDto patient;
         if (patientId != null && !patientId.isEmpty()) {
             patient = patientService.get(Long.parseLong(patientId));
+            if (patient == null) return "redirect:/patients";
             model.addAttribute(PATIENT, patient);
         } else {
-            if (patientPrev == null) return "patients/patients";
+            if (patientPrev == null || patientPrev.getName() == null) return "redirect:/patients";
             patient = patientService.get(patientPrev.getId());
         }
 
@@ -124,14 +125,14 @@ public class AppointmentController {
     public ModelAndView deleteSelected(@RequestParam("appointmentId") String appointmentId,
                                        @RequestParam("patientId") String patientId,
                                        RedirectAttributes redirectAttributes) {
-        ModelAndView mv = new ModelAndView("redirect:/appointments/appointments");
+        ModelAndView mv = new ModelAndView(REDIRECT_APPOINTMENTS);
         long id = Long.parseLong(appointmentId);
 
         eventService.setCancelledByAppointmentId(id);
         appointmentService.cancelAppointmentById(id);
         PatientDto patient = patientService.get(Long.parseLong(patientId));
 
-        redirectAttributes.addFlashAttribute("patient", patient);
+        redirectAttributes.addFlashAttribute(PATIENT, patient);
 
         return mv;
     }
@@ -162,12 +163,8 @@ public class AppointmentController {
                                         @RequestParam("days[]") String[] weekdays,
                                         @RequestParam(value = "times[]", required = false) String[] times,
                                         RedirectAttributes redirectAttributes) {
-
         initAppointmentDto(newAppointment, treatmentId, patientId, weekdays, times, redirectAttributes);
-        /*if (errors) {
-            TODO custom validation
-        }*/
-
+        //TODO custom validation
         long id = Long.parseLong(appointmentId);
         newAppointment.setId(id);
         eventService.setCancelledByAppointmentId(id);
@@ -180,12 +177,13 @@ public class AppointmentController {
         events.forEach(event -> event.setAppointmentIdCreatedBy(newAppointment.getId()));
         eventService.addEvents(events);
 
-        if (log.isDebugEnabled()) log.debug("Edited appointment with id {}. New appointment: {}", id,  newAppointment.toString());
+        if (log.isDebugEnabled())
+            log.debug("Edited appointment with id {}. New appointment: {}", id, newAppointment.toString());
 
-        return new ModelAndView("redirect:/appointments/appointments");
+        return new ModelAndView(REDIRECT_APPOINTMENTS);
     }
 
-//---------------------------------------------------------------------------------------------------------------
+    //---------------------------------------------------------------------------------------------------------------
     private void initAppointmentDto(AppointmentDto appointmentDto, String treatmentId, String patientId, String[] weekdays, String[] times, RedirectAttributes redirectAttributes) {
         TreatmentDto treatment = treatmentService.get(Long.parseLong(treatmentId));
         appointmentDto.setTreatment(treatment);

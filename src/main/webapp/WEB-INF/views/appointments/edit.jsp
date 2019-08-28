@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -18,8 +19,8 @@
 <div>${oldAppointment.regimenString} ${oldAppointment.treatment.treatmentType == 'MEDICATION' ? ', dose: ' : ""} ${oldAppointment.treatment.treatmentType == 'MEDICATION' ? oldAppointment.dose : ""}</div>
 <%--@elvariable id="newAppointment" type="com.tsystems.ecm.dto.AppointmentDto"--%>
 <form:form action="edit" method="post" modelAttribute="newAppointment">
-    <div>
-        <select name="treatmentId" class="form-select">
+    <div class="form-post-div">
+        <select name="treatmentId" class="form-select" required>
             <option value="" hidden selected disabled>Select treatment..</option>
             <optgroup label="Procedures">
                 <c:forEach items="${procedures}" var="var">
@@ -32,18 +33,21 @@
                 </c:forEach>
             </optgroup>
         </select>
-
-        <c:forEach items="${weekdays}" var="day">
-            <label><input type="checkbox" class="form-checkbox" name="days[]" value="${day}">${day}</label><br>
+        <c:forEach items="${weekdays}" var="day" varStatus="i">
+            <div class="inputGroup">
+                <input id="option${i.count}" name="days[]" type="checkbox" value="${day}"/>
+                <label for="option${i.count}">${day}</label>
+            </div>
         </c:forEach>
+
         <c:forEach items="${timesOfDay}" var="time">
             <label><input type="checkbox" class="form-checkbox" name="times[]" value="${time}">${time}</label><br>
         </c:forEach>
 
         <form:label path="duration" required="true">Duration (weeks)</form:label>
-        <form:input path="duration" cssClass="form-input"/>
+        <form:input path="duration" cssClass="form-input" required="true"/>
         <form:errors path="duration" cssClass="form-input err"/>
-
+        <br>
         <form:label path="dose">Dose (for medication only)</form:label>
         <form:input path="dose" cssClass="form-input"/>
         <form:errors path="dose" cssClass="form-input err"/>

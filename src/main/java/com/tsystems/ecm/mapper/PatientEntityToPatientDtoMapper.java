@@ -1,13 +1,13 @@
 package com.tsystems.ecm.mapper;
 
 import com.tsystems.ecm.dto.PatientDto;
-import com.tsystems.ecm.entity.PatientEntity;
+import com.tsystems.ecm.entity.Patient;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PatientEntityToPatientDtoMapper {
 
-    public PatientDto map(PatientEntity src) {
+    public PatientDto map(Patient src) {
         PatientDto dst = new PatientDto();
 
         dst.setId(src.getId());

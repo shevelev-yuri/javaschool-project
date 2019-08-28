@@ -1,14 +1,14 @@
 package com.tsystems.ecm.mapper;
 
 import com.tsystems.ecm.dto.TreatmentDto;
-import com.tsystems.ecm.entity.TreatmentEntity;
+import com.tsystems.ecm.entity.Treatment;
 import org.springframework.stereotype.Component;
 
 @Component
 public class TreatmentDtoToTreatmentEntityMapper {
 
-    public TreatmentEntity map(TreatmentDto src) {
-        TreatmentEntity dst = new TreatmentEntity();
+    public Treatment map(TreatmentDto src) {
+        Treatment dst = new Treatment();
 
         dst.setTreatmentName(src.getTreatmentName());
         dst.setTreatmentType(src.getTreatmentType());

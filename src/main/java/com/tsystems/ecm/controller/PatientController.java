@@ -24,6 +24,8 @@ public class PatientController {
 
     private static final Logger log = LogManager.getLogger(PatientController.class);
 
+    private static final String PATIENT = "patient";
+
     private PatientService patientService;
 
     private AppointmentService appointmentService;
@@ -61,11 +63,11 @@ public class PatientController {
         List<UserDto> doctors = userService.getAllDoctors();
         model.addAttribute("doctors", doctors);
 
-        return new ModelAndView("patients/add", "patient", new PatientDto());
+        return new ModelAndView("patients/add", PATIENT, new PatientDto());
     }
 
     @PostMapping("/add")
-    public ModelAndView addPatientAndGoToAppointment(@Valid @ModelAttribute("patient") PatientDto patient,
+    public ModelAndView addPatientAndGoToAppointment(@Valid @ModelAttribute(PATIENT) PatientDto patient,
                                                      BindingResult result,
                                                      RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
@@ -74,7 +76,7 @@ public class PatientController {
         }
 
         patient.setId(patientService.addPatient(patient));
-        redirectAttributes.addFlashAttribute("patient", patient);
+        redirectAttributes.addFlashAttribute(PATIENT, patient);
 
         if (log.isDebugEnabled()) log.debug("Created new patient. {}", patient.toString());
 
@@ -86,7 +88,7 @@ public class PatientController {
         ModelAndView mv = new ModelAndView("patients/discharge");
         long id = Long.parseLong(patientId);
         PatientDto patient = patientService.get(id);
-        mv.addObject("patient", patient);
+        mv.addObject(PATIENT, patient);
 
         List<AppointmentDto> appointments = appointmentService.getAllByPatientId(id);
         appointments.forEach(appointment -> regimenProcessorService.parseRegimen(appointment, false));
@@ -109,5 +111,4 @@ public class PatientController {
 
         return mv;
     }
-
 }

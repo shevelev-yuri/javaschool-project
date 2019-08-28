@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -10,59 +11,61 @@
 <body>
 <%@include file="/WEB-INF/views/layouts/_header.jsp" %>
 
-<div style="overflow-x:auto;">
-<table>
-    <thead>
-    <tr>
-        <th>#</th>
-        <th>Patient name</th>
-        <th>Treatment</th>
-        <th>Date and time</th>
-        <th>Status</th>
-        <th hidden></th>
-        <th hidden></th>
-        <th hidden></th>
-    </tr>
-    </thead>
-    <tbody>
-    <c:forEach items="${events}" var="event" varStatus="i">
-        <tr>
-            <td>${i.count}</td>
-            <td>${event.patient.name}</td>
-            <td>${event.treatment.treatmentName}</td>
-            <td>${event.scheduledDatetime}</td>
-            <td>${event.eventStatus == 'SCHEDULED' ? "Scheduled" : event.eventStatus == 'ACCOMPLISHED' ? "Accomplished" : "Cancelled"}</td>
-            <td>
-                <c:choose>
-                    <c:when test="${event.eventStatus == 'SCHEDULED'}">
-                        <form method="post" action="accomplished">
-                            <input type="hidden" name="patientId" value="${patient.id}">
-                            <button type="submit" class="table-button" name="eventId" value="${event.id}">Done</button>
-                        </form>
-                    </c:when>
-                    <c:otherwise>
-                        <button type="button" class="button-disabled" disabled>Done</button>
-                    </c:otherwise>
-                </c:choose>
-            </td>
-            <td>
-                <c:choose>
-                    <c:when test="${event.eventStatus == 'SCHEDULED'}">
-                        <form method="post" action="cancelled">
-                            <input type="hidden" name="patientId" value="${patient.id}">
-                            <button type="submit" class="table-button" name="eventId" value="${event.id}">Cancel</button>
-                        </form>
-                    </c:when>
-                    <c:otherwise>
-                        <button type="button" class="button-disabled" disabled>Cancel</button>
-                    </c:otherwise>
-                </c:choose>
-            </td>
-        </tr>
-    </c:forEach>
-    </tbody>
-</table>
-</div>
+<%@include file="_table.jsp" %>
+
+<c:if test="${pages.totalPages > 1}">
+    <ul class="pagination">
+        <c:choose>
+            <%--@elvariable id="pages" type="com.tsystems.ecm.utils.Pagination"--%>
+            <c:when test="${pages.currentPage eq 1}">
+                <li class="page-item disabled">
+                    <span class="page-link">Previous</span>
+                </li>
+            </c:when>
+            <c:otherwise>
+                <li class="page-item">
+                    <c:if test="${patient.id != 0}"><a class="page-link"
+                                                       href="events?page=${pages.currentPage - 1}&patientId=${patient.id}">Previous</a></c:if>
+                    <c:if test="${patient.id == 0}"><a class="page-link" href="events?page=${pages.currentPage - 1}">Previous</a></c:if>
+                </li>
+            </c:otherwise>
+        </c:choose>
+        <c:forEach items="${pages.pages}" var="page">
+            <c:if test="${page != -1}">
+                <c:if test="${pages.currentPage != page}">
+                    <li class="page-item"><c:if test="${patient.id != 0}"><a class="page-link"
+                                                                             href="events?page=${page}&patientId=${patient.id}">${page}</a></c:if>
+                        <c:if test="${patient.id == 0}"><a class="page-link"
+                                                           href="events?page=${page}">${page}</a></c:if>
+                    </li>
+                </c:if>
+                <c:if test="${pages.currentPage == page}">
+                    <li class="page-item active">
+                        <span class="page-link">${page}<span class="sr-only">(current)</span></span>
+                    </li>
+                </c:if>
+            </c:if>
+            <c:if test="${page == -1}">
+                <li class="page-item disabled">
+                    <span class="page-link">...</span>
+                </li>
+            </c:if>
+        </c:forEach>
+        <c:choose>
+            <c:when test="${pages.currentPage == pages.totalPages}">
+                <li class="page-item disabled">
+                    <span class="page-link">Next</span>
+                </li>
+            </c:when>
+            <c:otherwise>
+                <li class="page-item"><c:if test="${patient.id != 0}"><a class="page-link"
+                                                                         href="events?page=${pages.currentPage + 1}&patientId=${patient.id}">Next</a></c:if>
+                    <c:if test="${patient.id == 0}"><a class="page-link" href="events?page=${pages.currentPage + 1}">Next</a></c:if>
+                </li>
+            </c:otherwise>
+        </c:choose>
+    </ul>
+</c:if>
 <%@ include file="/WEB-INF/views/layouts/_footer.jsp" %>
 </body>
 </html>

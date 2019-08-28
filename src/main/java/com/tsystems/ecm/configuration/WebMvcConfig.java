@@ -1,6 +1,5 @@
 package com.tsystems.ecm.configuration;
 
-import com.tsystems.ecm.interceptor.CookieSessionInterceptor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -24,11 +23,6 @@ import java.util.Locale;
 public class WebMvcConfig implements WebMvcConfigurer {
 
     @Bean
-    public CookieSessionInterceptor sessionInterceptor() {
-        return new CookieSessionInterceptor();
-    }
-
-    @Bean
     public InternalResourceViewResolver setupViewResolver() {
         InternalResourceViewResolver resolver = new InternalResourceViewResolver();
         resolver.setPrefix("/WEB-INF/views/");
@@ -47,10 +41,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(sessionInterceptor())
-                .addPathPatterns("/**")
-                .excludePathPatterns("/login", "/", "/resources/**");
-
         LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
         localeChangeInterceptor.setParamName("lang");
         registry.addInterceptor(localeChangeInterceptor);

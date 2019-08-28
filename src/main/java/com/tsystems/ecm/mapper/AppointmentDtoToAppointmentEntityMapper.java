@@ -1,7 +1,7 @@
 package com.tsystems.ecm.mapper;
 
 import com.tsystems.ecm.dto.AppointmentDto;
-import com.tsystems.ecm.entity.AppointmentEntity;
+import com.tsystems.ecm.entity.Appointment;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -17,8 +17,8 @@ public class AppointmentDtoToAppointmentEntityMapper {
         this.toTreatmentEntityMapper = toTreatmentEntityMapper;
     }
 
-    public AppointmentEntity map(AppointmentDto src) {
-        AppointmentEntity dst = new AppointmentEntity();
+    public Appointment map(AppointmentDto src) {
+        Appointment dst = new Appointment();
 
         dst.setPatient(toPatientEntityMapper.map(src.getPatient()));
         dst.getPatient().setId(src.getPatient().getId());

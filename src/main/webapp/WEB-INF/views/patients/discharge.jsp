@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -11,6 +12,7 @@
 <body>
 <%@include file="/WEB-INF/views/layouts/_header.jsp" %>
 
+<div class="form-post-div">
 <h2>Discharge patient confirmation</h2>
 
 <%--@elvariable id="patient" type="com.tsystems.ecm.dto.PatientDto"--%>
@@ -26,14 +28,16 @@
 <c:forEach items="${appointments}" var="var" varStatus="i">
     <div>${var.regimenString} ${var.treatment.treatmentType == 'MEDICATION' ? ', dose: ' : ""} ${var.treatment.treatmentType == 'MEDICATION' ? var.dose : ""}</div>
 </c:forEach>
+    <c:if test="${fn:length(appointments) == 0}"><div>The patient has no active appointments</div></c:if>
 <br>
 <br>
 <form action="discharge" method="post">
-    <button type="submit" name="patientId" value="${patient.id}">Discharge patient</button>
+    <button type="submit" class="form-submit" name="patientId" value="${patient.id}">Discharge patient</button>
 </form>
-<form action="/ecm/patients" method="get">
+<form action="/ecm/patients" class="form-submit" method="get">
     <button type="submit">Cancel</button>
 </form>
+</div>
 <%@ include file="/WEB-INF/views/layouts/_footer.jsp" %>
 </body>
 </html>

@@ -3,16 +3,13 @@ package com.tsystems.ecm.entity;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-
-public class UserEntityTest {
+public class UserTest {
 
 
     private static final long ID = 1;
     private static final String LOGIN = "login";
     private static final String PSWD = "pswd";
-    private static final UserEntity user = new UserEntity();
+    private static final User user = new User();
 
     @Before
     public void setUp() {

@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -11,10 +12,11 @@
 <body>
 <%@include file="/WEB-INF/views/layouts/_header.jsp" %>
 
-<h2>Add new patients</h2>
+
 <%--@elvariable id="patient" type="com.tsystems.ecm.dto.PatientDto"--%>
 <form:form action="add" method="post" modelAttribute="patient">
     <div class="form-post-div">
+        <h3>Add new patients</h3>
         <form:label path="name" required="true" cssClass="form-label">Patients name</form:label>
         <form:input path="name" placeholder="Name" cssClass="form-input" cssErrorClass="form-input err"/>
         <form:errors path="name" cssClass="error" element="span"/>

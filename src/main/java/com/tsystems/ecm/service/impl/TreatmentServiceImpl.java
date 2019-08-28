@@ -2,6 +2,7 @@ package com.tsystems.ecm.service.impl;
 
 import com.tsystems.ecm.dao.TreatmentDao;
 import com.tsystems.ecm.dto.TreatmentDto;
+import com.tsystems.ecm.entity.Treatment;
 import com.tsystems.ecm.mapper.TreatmentEntityToTreatmentDtoMapper;
 import com.tsystems.ecm.service.TreatmentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,9 @@ public class TreatmentServiceImpl implements TreatmentService {
     @Override
     @Transactional
     public TreatmentDto get(long treatmentId) {
-        return toTreatmentDtoMapper.map(treatmentDao.get(treatmentId));
+        Treatment treatment = treatmentDao.get(treatmentId);
+        if (treatment == null) return null;
+
+        return toTreatmentDtoMapper.map(treatment);
     }
 }

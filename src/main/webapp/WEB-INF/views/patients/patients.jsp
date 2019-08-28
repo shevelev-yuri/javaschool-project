@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -12,7 +13,7 @@
 
 <a href="/ecm/patients/add">Add new patient</a>
 <br>
-<div style="overflow-x:auto;">
+<div class="table-post-div" style="overflow-x:auto;">
     <table>
         <thead>
         <tr>
@@ -24,7 +25,7 @@
             <th>Status</th>
             <th hidden></th>
             <th hidden></th>
-            <th hidden></th>
+            <%--<th hidden></th>--%>
             <th hidden></th>
         </tr>
         </thead>
@@ -49,11 +50,11 @@
                         </c:otherwise>
                     </c:choose>
                 </td>
-                <td>
-                    <form method="get" action="events/events">
+              <%--  <td>
+                    <form method="getUserByLogin" action="events/events">
                         <button type="submit" class="table-button" name="patientId" value="${patient.id}">View events</button>
                     </form>
-                </td>
+                </td>--%>
                 <td>
                     <c:choose>
                         <c:when test="${patient.patientStatus == 'ON_TREATMENT'}">
@@ -70,11 +71,11 @@
                     <c:choose>
                         <c:when test="${patient.patientStatus == 'ON_TREATMENT'}">
                             <form method="get" action="patients/discharge">
-                                <button type="submit" name="patientId" class="table-button"  value="${patient.id}">Discharge</button>
+                                <button type="submit" name="patientId" class="table-button sml"  value="${patient.id}">Discharge</button>
                             </form>
                         </c:when>
                         <c:otherwise>
-                            <button type="button" class="button-disabled" disabled>Discharge</button>
+                            <button type="button" class="button-disabled sml" disabled>Discharge</button>
                         </c:otherwise>
                     </c:choose>
                 </td>

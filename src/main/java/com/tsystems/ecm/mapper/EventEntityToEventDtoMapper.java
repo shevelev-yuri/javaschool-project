@@ -1,7 +1,7 @@
 package com.tsystems.ecm.mapper;
 
 import com.tsystems.ecm.dto.EventDto;
-import com.tsystems.ecm.entity.EventEntity;
+import com.tsystems.ecm.entity.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +19,7 @@ public class EventEntityToEventDtoMapper {
         this.toTreatmentDtoMapper = toTreatmentDtoMapper;
     }
 
-    public EventDto map(EventEntity src) {
+    public EventDto map(Event src) {
         EventDto dst = new EventDto();
 
         dst.setId(src.getId());

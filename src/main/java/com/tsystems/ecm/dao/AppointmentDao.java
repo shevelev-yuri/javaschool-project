@@ -1,6 +1,6 @@
 package com.tsystems.ecm.dao;
 
-import com.tsystems.ecm.entity.AppointmentEntity;
+import com.tsystems.ecm.entity.Appointment;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
@@ -11,32 +11,32 @@ import java.util.Collections;
 import java.util.List;
 
 @Repository
-public class AppointmentDao extends AbstractDao<AppointmentEntity> {
+public class AppointmentDao extends AbstractDao<Appointment> {
 
     private static final Logger log = LogManager.getLogger(AppointmentDao.class);
 
     private static final String SELECT_APPOINTMENTS_BY_PATIENT_ID = "select * from appointments where patient_id = ?";
 
-    public AppointmentEntity get(long id) {
-        return getSessionFactory().getCurrentSession().get(AppointmentEntity.class, id);
+    public Appointment get(long id) {
+        return getSessionFactory().getCurrentSession().get(Appointment.class, id);
     }
 
-    public void save(AppointmentEntity appointment) {
+    public void save(Appointment appointment) {
         persist(appointment);
     }
 
-    public void update(AppointmentEntity appointment) {
+    public void update(Appointment appointment) {
         getSessionFactory().getCurrentSession().update(appointment);
     }
 
-    public List<AppointmentEntity> getAllByPatientId(long id) {
+    public List<Appointment> getAllByPatientId(long id) {
         Query query = getSessionFactory().getCurrentSession()
-                .createNativeQuery(SELECT_APPOINTMENTS_BY_PATIENT_ID, AppointmentEntity.class)
+                .createNativeQuery(SELECT_APPOINTMENTS_BY_PATIENT_ID, Appointment.class)
                 .setParameter(1, id);
 
-        List<AppointmentEntity> appointments;
+        List<Appointment> appointments;
         try {
-            appointments = (List<AppointmentEntity>) query.getResultList();
+            appointments = (List<Appointment>) query.getResultList();
         } catch (NoResultException nre) {
             log.debug(nre.getMessage());
             return Collections.emptyList();

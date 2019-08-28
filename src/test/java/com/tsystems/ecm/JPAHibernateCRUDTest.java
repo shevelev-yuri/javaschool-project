@@ -1,6 +1,6 @@
 package com.tsystems.ecm;
 
-import com.tsystems.ecm.entity.UserEntity;
+import com.tsystems.ecm.entity.User;
 import com.tsystems.ecm.entity.enums.Role;
 import org.junit.Test;
 
@@ -14,20 +14,20 @@ public class JPAHibernateCRUDTest extends JPAHibernateTest {
 
     @Test
     public void testGetObjectById_success() {
-        UserEntity user = em.find(UserEntity.class, 1L);
+        User user = em.find(User.class, 1L);
         assertNotNull(user);
     }
 
     @Test
     public void testGetAll_success() {
-        List<UserEntity> users = em.createQuery("SELECT u FROM UserEntity u", UserEntity.class).getResultList();
+        List<User> users = em.createQuery("SELECT u FROM User u", User.class).getResultList();
         assertEquals(1, users.size());
     }
 
     @Test
     public void testPersist_success() {
         em.getTransaction().begin();
-        UserEntity user = new UserEntity();
+        User user = new User();
         user.setLogin("Login 1");
         user.setPassword("Password 1");
         user.setName("Name 1");
@@ -35,7 +35,7 @@ public class JPAHibernateCRUDTest extends JPAHibernateTest {
         em.persist(user);
         em.getTransaction().commit();
 
-        List<UserEntity> users = em.createQuery("SELECT u FROM UserEntity u", UserEntity.class).getResultList();
+        List<User> users = em.createQuery("SELECT u FROM User u", User.class).getResultList();
 
         assertNotNull(users);
         assertEquals(2, users.size());
@@ -43,13 +43,13 @@ public class JPAHibernateCRUDTest extends JPAHibernateTest {
 
     @Test
     public void testDelete_success(){
-        UserEntity user = em.find(UserEntity.class, 1L);
+        User user = em.find(User.class, 1L);
 
         em.getTransaction().begin();
         em.remove(user);
         em.getTransaction().commit();
 
-        List<UserEntity> users = em.createQuery("SELECT u FROM UserEntity u", UserEntity.class).getResultList();
+        List<User> users = em.createQuery("SELECT u FROM User u", User.class).getResultList();
         assertEquals(1, users.size());
     }
 

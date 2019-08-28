@@ -1,12 +1,18 @@
 package com.tsystems.ecm.dto;
 
-import com.tsystems.ecm.entity.PatientEntity;
 import com.tsystems.ecm.entity.enums.PatientStatus;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
+@ToString
 public class PatientDto {
 
     private static final String MUST_BE_SPECIFIED = "must be specified!";
@@ -18,7 +24,7 @@ public class PatientDto {
     private long id;
 
     @NotBlank(message = MUST_BE_SPECIFIED)
-    @Size(max = 50,  message = NAME_SIZE)
+    @Size(max = 50, message = NAME_SIZE)
     private String name;
 
     @NotBlank(message = MUST_BE_SPECIFIED)
@@ -32,76 +38,4 @@ public class PatientDto {
     private String doctorName;
 
     private PatientStatus patientStatus;
-
-    public PatientDto() {
-    }
-
-    public PatientDto(PatientEntity patientEntity) {
-        this.id = patientEntity.getId();
-        this.name = patientEntity.getName();
-        this.diagnosis = patientEntity.getDiagnosis();
-        this.insuranceNumber = patientEntity.getInsuranceNumber();
-        this.doctorName = patientEntity.getDoctorName();
-        this.patientStatus = patientEntity.getPatientStatus();
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDiagnosis() {
-        return diagnosis;
-    }
-
-    public void setDiagnosis(String diagnosis) {
-        this.diagnosis = diagnosis;
-    }
-
-    public String getInsuranceNumber() {
-        return insuranceNumber;
-    }
-
-    public void setInsuranceNumber(String insuranceNumber) {
-        this.insuranceNumber = insuranceNumber;
-    }
-
-    public PatientStatus getPatientStatus() {
-        return patientStatus;
-    }
-
-    public void setPatientStatus(PatientStatus patientStatus) {
-        this.patientStatus = patientStatus;
-    }
-
-    public String getDoctorName() {
-        return doctorName;
-    }
-
-    public void setDoctorName(String doctorName) {
-        this.doctorName = doctorName;
-    }
-
-    @Override
-    public String toString() {
-        return "PatientDto{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", diagnosis='" + diagnosis + '\'' +
-                ", insuranceNumber='" + insuranceNumber + '\'' +
-                ", doctorName='" + doctorName + '\'' +
-                ", patientStatus=" + patientStatus +
-                '}';
-    }
 }

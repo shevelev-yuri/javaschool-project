@@ -12,9 +12,11 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import static java.time.temporal.TemporalAdjusters.next;
 
@@ -99,21 +101,24 @@ public class RegimenProcessorServiceImpl implements RegimenProcessorService {
             List<LocalDateTime> nextEventsDateTimes = new ArrayList<>();
 
             createEvents(days, times, duration, nextEventsDateTimes);
-
-            for (LocalDateTime eventDay : nextEventsDateTimes) {
-                EventDto eventDto = new EventDto();
-                eventDto.setPatient(appointmentDto.getPatient());
-                eventDto.setTreatment(appointmentDto.getTreatment());
-                eventDto.setEventStatus(EventStatus.SCHEDULED);
-                eventDto.setScheduledDatetime(eventDay);
-
-                events.add(eventDto);
-            }
+            addEvents(appointmentDto, events, nextEventsDateTimes);
 
             return events;
         }
 
         return Collections.emptyList();
+    }
+
+    private void addEvents(AppointmentDto appointmentDto, List<EventDto> events, List<LocalDateTime> nextEventsDateTimes) {
+        for (LocalDateTime eventDay : nextEventsDateTimes) {
+            EventDto eventDto = new EventDto();
+            eventDto.setPatient(appointmentDto.getPatient());
+            eventDto.setTreatment(appointmentDto.getTreatment());
+            eventDto.setEventStatus(EventStatus.SCHEDULED);
+            eventDto.setScheduledDatetime(eventDay);
+
+            events.add(eventDto);
+        }
     }
 
     private String transformString(String[] src) {
@@ -149,11 +154,19 @@ public class RegimenProcessorServiceImpl implements RegimenProcessorService {
         }
 
         //Create the right number of LocalDateTime instances for each day (and for each time of day, if present)
+        createDateTimes(days, times, duration, nextEventsDateTimes, localTimes);
+
+    }
+
+    private void createDateTimes(String[] days, String[] times, int duration, List<LocalDateTime> nextEventsDateTimes, List<LocalTime> localTimes) {
         LocalDate today = LocalDate.now();
         for (int i = 0; i < duration; i++) {
             for (String day : days) {
                 if (times != null) {
                     for (LocalTime localTime : localTimes) {
+                        // Adding today events
+                        addingTodayEvents(nextEventsDateTimes, i, localTime, day);
+
                         LocalDateTime toAdd = LocalDateTime.of(today
                                 .with(next(DayOfWeek.valueOf(day.toUpperCase()))), localTime);
                         nextEventsDateTimes.add(toAdd);
@@ -169,6 +182,11 @@ public class RegimenProcessorServiceImpl implements RegimenProcessorService {
             nextEventsDateTimes.sort(LocalDateTime::compareTo);
             today = LocalDate.from(nextEventsDateTimes.get(nextEventsDateTimes.size() - 1));
         }
+    }
 
+    private void addingTodayEvents(List<LocalDateTime> nextEventsDateTimes, int i, LocalTime localTime, String day) {
+        if (LocalDateTime.now().with(localTime).isAfter(LocalDateTime.now()) && i == 0 && day.equals(LocalDateTime.now().format(DateTimeFormatter.ofPattern("eeee").withLocale(Locale.ENGLISH)))) {
+            nextEventsDateTimes.add(LocalDateTime.now().with(localTime));
+        }
     }
 }

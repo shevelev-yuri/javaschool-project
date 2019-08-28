@@ -1,7 +1,7 @@
 package com.tsystems.ecm.mapper;
 
 import com.tsystems.ecm.dto.EventDto;
-import com.tsystems.ecm.entity.EventEntity;
+import com.tsystems.ecm.entity.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,8 +19,9 @@ public class EventDtoToEventEntityMapper {
         this.toTreatmentEntityMapper = toTreatmentEntityMapper;
     }
 
-    public EventEntity map(EventDto src) {
-        EventEntity dst = new EventEntity();
+    //Mapstruct
+    public Event map(EventDto src) {
+        Event dst = new Event();
 
         dst.setPatient(toPatientEntityMapper.map(src.getPatient()));
         dst.getPatient().setId(src.getPatient().getId());

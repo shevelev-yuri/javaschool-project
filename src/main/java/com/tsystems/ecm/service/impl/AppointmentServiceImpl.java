@@ -2,7 +2,7 @@ package com.tsystems.ecm.service.impl;
 
 import com.tsystems.ecm.dao.AppointmentDao;
 import com.tsystems.ecm.dto.AppointmentDto;
-import com.tsystems.ecm.entity.AppointmentEntity;
+import com.tsystems.ecm.entity.Appointment;
 import com.tsystems.ecm.mapper.AppointmentDtoToAppointmentEntityMapper;
 import com.tsystems.ecm.mapper.AppointmentEntityToAppointmentDtoMapper;
 import com.tsystems.ecm.service.AppointmentService;
@@ -40,10 +40,10 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     @Transactional
     public long addOrUpdateAppointment(AppointmentDto appointmentDto) {
-        AppointmentEntity appointment;
+        Appointment appointment;
         if (appointmentDto.getId() != 0) {
             appointment = appointmentDao.get(appointmentDto.getId());
-            AppointmentEntity src = toAppointmentEntityMapper.map(appointmentDto);
+            Appointment src = toAppointmentEntityMapper.map(appointmentDto);
             appointment.setPatient(src.getPatient());
             appointment.setTreatment(src.getTreatment());
             appointment.setRegimen(src.getRegimen());
@@ -78,7 +78,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     @Transactional
     public List<AppointmentDto> getAllByPatientId(long id) {
-        List<AppointmentEntity> entities = appointmentDao.getAllByPatientId(id);
+        List<Appointment> entities = appointmentDao.getAllByPatientId(id);
 
         return entities.stream().map(toAppointmentDtoMapper::map).collect(Collectors.toList());
     }
@@ -92,7 +92,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Transactional
     public void cancelAppointmentById(long id) {
         //TODO change logic - implement status change instead of removal
-        AppointmentEntity appointmentToDelete = appointmentDao.get(id);
+        Appointment appointmentToDelete = appointmentDao.get(id);
         appointmentDao.delete(appointmentToDelete);
     }
 

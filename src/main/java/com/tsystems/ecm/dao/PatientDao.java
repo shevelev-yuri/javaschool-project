@@ -1,31 +1,31 @@
 package com.tsystems.ecm.dao;
 
-import com.tsystems.ecm.entity.PatientEntity;
+import com.tsystems.ecm.entity.Patient;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public class PatientDao extends AbstractDao<PatientEntity> {
+public class PatientDao extends AbstractDao<Patient> {
 
-    private static final String SELECT_ALL_PATIENTS = "FROM PatientEntity";
+    private static final String SELECT_ALL_PATIENTS = "FROM Patient";
 
-    public void save(PatientEntity patient) {
+    public void save(Patient patient) {
         persist(patient);
     }
 
-    public PatientEntity get(long id) {
-        return getSessionFactory().getCurrentSession().get(PatientEntity.class, id);
+    public Patient get(long id) {
+        return getSessionFactory().getCurrentSession().get(Patient.class, id);
     }
 
-    public List<PatientEntity> getAll() {
-        return getSessionFactory().getCurrentSession().createQuery(SELECT_ALL_PATIENTS, PatientEntity.class).getResultList();
+    public List<Patient> getAll() {
+        return getSessionFactory().getCurrentSession().createQuery(SELECT_ALL_PATIENTS, Patient.class).getResultList();
     }
 
     public void remove(long id) {
         Session session = getSessionFactory().getCurrentSession();
-        PatientEntity patient = session.get(PatientEntity.class, id);
+        Patient patient = session.get(Patient.class, id);
         if (patient != null) session.delete(patient);
     }
 }

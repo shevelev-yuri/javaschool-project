@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -11,14 +12,11 @@
 <body>
 <%@include file="/WEB-INF/views/layouts/_header.jsp" %>
 
-<h2>Patient: ${patient.name}</h2>
-<br>
-<br>
-<h2>Add new appointment</h2>
 <%--@elvariable id="appointment" type="com.tsystems.ecm.dto.AppointmentDto"--%>
 <form:form action="add" method="post" modelAttribute="appointment">
-    <div>
-        <select name="treatmentId" class="form-select">
+    <div class="form-post-div">
+        <h3>Add new appointment for patient: ${patient.name}</h3>
+        <label>Treatment<select name="treatmentId" class="form-select" required>
             <option value="" hidden selected disabled>Select treatment..</option>
             <optgroup label="Procedures">
                 <c:forEach items="${procedures}" var="var">
@@ -31,18 +29,26 @@
                 </c:forEach>
             </optgroup>
         </select>
-
-        <c:forEach items="${weekdays}" var="day">
-            <label><input type="checkbox" class="form-checkbox" name="days[]" value="${day}">${day}</label><br>
+        </label>
+        <div>Select days</div>
+        <c:forEach items="${weekdays}" var="day" varStatus="i">
+            <div class="inputGroup">
+                <input id="option${i.count}" name="days[]" type="checkbox" value="${day}"/>
+                <label for="option${i.count}">${day}</label>
+            </div>
         </c:forEach>
-        <c:forEach items="${timesOfDay}" var="time">
-            <label><input type="checkbox" class="form-checkbox" name="times[]" value="${time}">${time}</label><br>
+        <div>Select time (optional)</div>
+        <c:forEach items="${timesOfDay}" var="time" varStatus="i">
+            <div class="inputGroup">
+                <input id="timeOption${i.count}" name="times[]" type="checkbox" value="${time}"/>
+                <label for="timeOption${i.count}">${time}</label>
+            </div>
         </c:forEach>
 
-        <form:label path="duration" required="true">Duration (weeks)</form:label>
-        <form:input path="duration" cssClass="form-input"/>
+        <form:label path="duration">Duration (weeks)</form:label>
+        <form:input path="duration" cssClass="form-input" required="true"/>
         <form:errors path="duration" cssClass="form-input err"/>
-
+        <br>
         <form:label path="dose">Dose (for medication only)</form:label>
         <form:input path="dose" cssClass="form-input"/>
         <form:errors path="dose" cssClass="form-input err"/>

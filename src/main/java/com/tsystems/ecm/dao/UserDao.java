@@ -1,6 +1,6 @@
 package com.tsystems.ecm.dao;
 
-import com.tsystems.ecm.entity.UserEntity;
+import com.tsystems.ecm.entity.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
@@ -10,21 +10,21 @@ import javax.persistence.Query;
 import java.util.List;
 
 @Repository
-public class UserDao extends AbstractDao<UserEntity> {
+public class UserDao extends AbstractDao<User> {
 
     private static final Logger log = LogManager.getLogger(UserDao.class);
 
     private static final String SELECT_USER_BY_LOGIN = "select * from users where login = ?";
-    private static final String SELECT_ALL_USERS = "FROM UserEntity";
+    private static final String SELECT_ALL_USERS = "FROM User";
 
-    public UserEntity getByLogin(String login) {
+    public User getByLogin(String login) {
         Query query = getSessionFactory().getCurrentSession()
-                .createNativeQuery(SELECT_USER_BY_LOGIN, UserEntity.class)
+                .createNativeQuery(SELECT_USER_BY_LOGIN, User.class)
                 .setParameter(1, login);
 
-        UserEntity user;
+        User user;
         try {
-            user = (UserEntity) query.getSingleResult();
+            user = (User) query.getSingleResult();
         } catch (NoResultException nre) {
             //TODO handle
             log.debug(nre.getMessage());
@@ -40,9 +40,13 @@ public class UserDao extends AbstractDao<UserEntity> {
         return user;
     }
 
-    public List<UserEntity> getAll() {
+    public List<User> getAll() {
         return getSessionFactory().getCurrentSession()
-                .createQuery(SELECT_ALL_USERS, UserEntity.class)
+                .createQuery(SELECT_ALL_USERS, User.class)
                 .getResultList();
+    }
+
+    public void save(User user) {
+        persist(user);
     }
 }

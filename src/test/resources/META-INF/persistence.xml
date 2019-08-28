@@ -6,7 +6,7 @@
     <persistence-unit name="test" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <!-- add classes -->
-        <class>com.tsystems.ecm.entity.UserEntity</class>
+        <class>com.tsystems.ecm.entity.User</class>
 
         <properties>
             <!-- Configuring JDBC properties -->
