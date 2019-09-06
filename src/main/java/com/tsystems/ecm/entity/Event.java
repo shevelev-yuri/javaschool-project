@@ -32,6 +32,8 @@ public class Event {
     @JoinColumn(name = "treatment_id")
     private Treatment treatment;
 
+    private String cancelReason;
+
     private long appointmentIdCreatedBy;
 
 }

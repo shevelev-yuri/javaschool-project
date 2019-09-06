@@ -1,6 +1,7 @@
 package com.tsystems.ecm.service;
 
 import com.tsystems.ecm.dto.EventDto;
+import com.tsystems.ecm.dto.EventDtoRest;
 
 import java.util.List;
 
@@ -12,9 +13,13 @@ public interface EventService {
 
     List<EventDto> getAllToday(int pageSize, int pageNumber);
 
+    List<EventDtoRest> getAllToday();
+
     List<EventDto> getAllByPage(int pageNumber, int pageSize);
 
     int addEvents(List<EventDto> events);
+
+    void setCancelledById(long id, String reason);
 
     void setCancelledByAppointmentId(long appointmentId);
 
@@ -23,7 +28,4 @@ public interface EventService {
     int getTotalPages(int pageSize, String queryString);
 
     void setAccomplishedById(long id);
-
-    void setCancelledById(long id);
-
 }

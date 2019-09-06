@@ -18,13 +18,19 @@ public class WebAppInitializer implements WebApplicationInitializer {
     public void onStartup(ServletContext container) {
         log.debug("Creating Spring root context");
         AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
-        rootContext.register(AppConfig.class, SecurityConfig.class);
+        log.debug("Created context: {}", rootContext);
+
+        log.debug("Register application, JMS and security configs to root context");
+        rootContext.register(AppConfig.class, SecurityConfig.class, JmsConfig.class);
 
         log.debug("Adding listener for managing the lifecycle of the spring root context");
         container.addListener(new ContextLoaderListener(rootContext));
 
         log.debug("Creating DispatcherServlet context");
         AnnotationConfigWebApplicationContext dispatcherContext = new AnnotationConfigWebApplicationContext();
+        log.debug("Created context: {}", dispatcherContext);
+
+        log.debug("Register WebMvc config to DispatcherServlet context");
         dispatcherContext.register(WebMvcConfig.class);
 
         log.debug("Registering Spring MVC DispatcherServlet");

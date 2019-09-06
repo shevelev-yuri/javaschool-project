@@ -6,6 +6,8 @@
 <html>
 <head>
     <%@include file="/WEB-INF/views/layouts/_head.jsp" %>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/static/js/jquery.mousewheel.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/static/js/scroll.js"></script>
 
     <title>Form: add appointment</title>
 </head>
@@ -13,10 +15,10 @@
 <%@include file="/WEB-INF/views/layouts/_header.jsp" %>
 
 <%--@elvariable id="appointment" type="com.tsystems.ecm.dto.AppointmentDto"--%>
-<form:form action="add" method="post" modelAttribute="appointment">
+<form action="add" method="post">
     <div class="form-post-div">
         <h3>Add new appointment for patient: ${patient.name}</h3>
-        <label>Treatment<select name="treatmentId" class="form-select" required>
+        <label>Treatment<select name="treatmentId" class="form-select" style="margin-left: 20px" required>
             <option value="" hidden selected disabled>Select treatment..</option>
             <optgroup label="Procedures">
                 <c:forEach items="${procedures}" var="var">
@@ -45,18 +47,16 @@
             </div>
         </c:forEach>
 
-        <form:label path="duration">Duration (weeks)</form:label>
-        <form:input path="duration" cssClass="form-input" required="true"/>
-        <form:errors path="duration" cssClass="form-input err"/>
+        <label for="duration">Duration in weeks:</label>
+        <input id="duration" class="form-input" type="number" min="1" max="10" step="1" name="duration" placeholder="1" required/>
         <br>
-        <form:label path="dose">Dose (for medication only)</form:label>
-        <form:input path="dose" cssClass="form-input"/>
-        <form:errors path="dose" cssClass="form-input err"/>
+        <label for="dose">Dose (for medications only):</label>
+        <input id="dose" class="form-input" type="text" name="dose"/>
 
         <input type="hidden" name="patientId" value="${patient.id}"/>
         <button type="submit" class="form-submit">Add appointment</button>
     </div>
-</form:form>
+</form>
 <%@ include file="/WEB-INF/views/layouts/_footer.jsp" %>
 
 </body>

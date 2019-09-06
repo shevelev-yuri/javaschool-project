@@ -37,6 +37,13 @@ th, td {
     vertical-align: center;
 }
 
+td[colspan="2"] {
+    padding: 12px 5px;
+    width: 20%;
+    line-height: 1rem;
+    text-align: justify;
+}
+
 th {
     background-color: #e3f2fd;
 }
@@ -61,6 +68,10 @@ a:hover {
     color: #475bff;
 }
 
+label {
+    margin-bottom: 0;
+}
+
 .footer {
     position: absolute;
     bottom: 0;
@@ -69,6 +80,10 @@ a:hover {
     line-height: 59px;
     background-color: #E3F2FD;
     border-top: 1px solid #aebdc8;
+}
+
+.td-buttons {
+    width: 10%;
 }
 
 .error {
@@ -94,7 +109,7 @@ a:hover {
 .form-input {
     width: 30%;
     min-width: 250px;
-    padding: 5px 20px;
+    padding: 5px 5px 5px 10px;
     margin: 8px 0;
     display: inline-block;
     border: 2px solid #ccc;
@@ -109,8 +124,8 @@ a:hover {
 .form-select {
     width: 30%;
     min-width: 250px;
-    padding: 5px 20px;
-    margin: 8px 0 8px 20px;
+    padding: 5px 0 5px 10px;
+    margin: 8px 0 8px 0;
     display: inline-block;
     border: 2px solid #ccc;
     background-color: #ffffff;
@@ -168,8 +183,8 @@ a:hover {
 
 .table-button {
     width: 144px;
-    background-color: #3da0ff;
-    color: #20262c;
+    background-color: #0058ad;
+    color: #ffffff;
     padding: 3px 10px;
     margin: 4px 2px 4px 2px;
     border: 2px dimgrey;
@@ -179,16 +194,24 @@ a:hover {
     transition-duration: 0.4s;
 }
 
+.table-button.cancel:hover {
+    background-color: #770000;
+}
+
+.table-button.cancel:active {
+    background-color: #ff0000;
+}
+
 .table-button.sml {
     width: 82px;
 }
 
 .table-button:hover {
-    background-color: #638be4;
+    background-color: #006600;
 }
 
 .table-button:active {
-    background-color: #64c5c5;
+    background-color: #00cc00;
 }
 
 .button-disabled {
@@ -215,11 +238,13 @@ a:hover {
     background-color: #ffffff;
     min-width: 188px;
     max-width: 660px;
+    border-radius: 10px;
     width: 100%;
     display: block;
     margin: 10px 0;
     position: relative;
 }
+
 .inputGroup label {
     padding: 7px 30px;
     width: 100%;
@@ -227,11 +252,13 @@ a:hover {
     text-align: left;
     color: #3C454C;
     cursor: pointer;
+    border-radius: 10px;
     position: relative;
     z-index: 2;
     transition: color 200ms ease-in;
     overflow: hidden;
 }
+
 .inputGroup label:before {
     width: 10px;
     height: 10px;
@@ -247,6 +274,7 @@ a:hover {
     opacity: 0;
     z-index: -1;
 }
+
 .inputGroup label:after {
     width: 24px;
     height: 24px;
@@ -266,18 +294,22 @@ a:hover {
     cursor: pointer;
     transition: all 200ms ease-in;
 }
+
 .inputGroup input:checked ~ label {
     color: #fff;
 }
+
 .inputGroup input:checked ~ label:before {
     -webkit-transform: translate(-50%, -50%) scale3d(50, 50, 1);
     transform: translate(-50%, -50%) scale3d(70, 70, 1);
     opacity: 1;
 }
+
 .inputGroup input:checked ~ label:after {
     background-color: #3da0ff;
     border-color: #3c505f;
 }
+
 .inputGroup input {
     width: 32px;
     height: 32px;
@@ -320,4 +352,9 @@ a:hover {
 
 .form-filter-buttons {
     display: inline;
+}
+
+.form-button-inline-right {
+    display: inline;
+    float: right;
 }

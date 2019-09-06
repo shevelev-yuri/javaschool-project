@@ -42,7 +42,7 @@
                 <td>
                     <form method="post" action="delete">
                         <input type="hidden" name="patientId" value="${patient.id}">
-                        <button type="submit" name="appointmentId" class="table-button sml" value="${appointment.id}">Cancel
+                        <button type="submit" name="appointmentId" class="table-button sml cancel" value="${appointment.id}">Cancel
                         </button>
                     </form>
                 </td>

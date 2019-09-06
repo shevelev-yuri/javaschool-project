@@ -1,13 +1,17 @@
 package com.tsystems.ecm.entity;
 
 import com.tsystems.ecm.entity.enums.TreatmentType;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 
 @Getter
 @Setter
+@ToString
+@EqualsAndHashCode
 @Entity
 @Table(name = "appointments")
 public class Appointment {
@@ -34,16 +38,4 @@ public class Appointment {
 
     private String dose;
 
-    @Override
-    public String toString() {
-        return "Appointment{" +
-                "id=" + id +
-                ", patient=" + patient.toString() +
-                ", treatment=" + treatment.toString() +
-                ", type=" + type +
-                ", regimen='" + regimen + '\'' +
-                ", duration=" + duration +
-                ", dose='" + dose + '\'' +
-                '}';
-    }
 }

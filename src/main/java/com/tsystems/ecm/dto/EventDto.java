@@ -23,5 +23,7 @@ public class EventDto {
 
     private TreatmentDto treatment;
 
+    private String cancelReason;
+
     private long appointmentIdCreatedBy;
 }

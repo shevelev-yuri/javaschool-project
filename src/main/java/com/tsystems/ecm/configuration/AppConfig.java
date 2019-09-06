@@ -24,6 +24,7 @@ public class AppConfig {
 
     private static final Logger log = LogManager.getLogger(AppConfig.class);
 
+
     @Autowired
     private Environment environment;
 
@@ -62,7 +63,7 @@ public class AppConfig {
         dataSource.setUsername(environment.getRequiredProperty("db.username"));
         dataSource.setPassword(environment.getRequiredProperty("db.password"));
         dataSource.setJdbcUrl(environment.getRequiredProperty("db.url"));
-        log.trace("Setting dataSource with parameters (username: {}, password: {}, JDBC URL: {})", dataSource.getUsername(), dataSource.getPassword(), dataSource.getJdbcUrl());
+        log.trace("Setting dataSource with parameters (username: {}, password: [PROTECTED], JDBC URL: {})", dataSource.getUsername(), dataSource.getJdbcUrl());
 
         return dataSource;
     }

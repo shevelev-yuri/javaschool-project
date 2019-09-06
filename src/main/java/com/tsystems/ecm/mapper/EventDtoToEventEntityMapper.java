@@ -19,7 +19,6 @@ public class EventDtoToEventEntityMapper {
         this.toTreatmentEntityMapper = toTreatmentEntityMapper;
     }
 
-    //Mapstruct
     public Event map(EventDto src) {
         Event dst = new Event();
 
@@ -29,6 +28,9 @@ public class EventDtoToEventEntityMapper {
         dst.getTreatment().setId(src.getTreatment().getId());
         dst.setEventStatus(src.getEventStatus());
         dst.setScheduledDatetime(src.getScheduledDatetime());
+        if (src.getCancelReason() != null && !src.getCancelReason().isEmpty()) {
+            dst.setCancelReason(src.getCancelReason());
+        }
         dst.setAppointmentIdCreatedBy(src.getAppointmentIdCreatedBy());
 
         return dst;

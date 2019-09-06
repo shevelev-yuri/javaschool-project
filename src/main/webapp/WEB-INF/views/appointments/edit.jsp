@@ -6,21 +6,20 @@
 <html>
 <head>
     <%@include file="/WEB-INF/views/layouts/_head.jsp" %>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/static/js/jquery.mousewheel.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/static/js/scroll.js"></script>
 
     <title>Form: edit appointment</title>
 </head>
 <body>
 <%@include file="/WEB-INF/views/layouts/_header.jsp" %>
 
-<h2>Patient: ${patient.name}</h2>
-<br>
-<br>
-<h2>Edit appointment:</h2>
-<div>${oldAppointment.regimenString} ${oldAppointment.treatment.treatmentType == 'MEDICATION' ? ', dose: ' : ""} ${oldAppointment.treatment.treatmentType == 'MEDICATION' ? oldAppointment.dose : ""}</div>
 <%--@elvariable id="newAppointment" type="com.tsystems.ecm.dto.AppointmentDto"--%>
-<form:form action="edit" method="post" modelAttribute="newAppointment">
-    <div class="form-post-div">
-        <select name="treatmentId" class="form-select" required>
+<div class="form-post-div">
+    <form action="edit" method="post" style="display: inline">
+        <h3 style="margin-bottom: .5rem">Patient: ${patient.name}</h3>
+        <p>Edit appointment:<br>${oldAppointment.regimenString} ${oldAppointment.treatment.treatmentType == 'MEDICATION' ? ', dose: ' : ""} ${oldAppointment.treatment.treatmentType == 'MEDICATION' ? oldAppointment.dose : ""}</p>
+        <label>Treatment<select name="treatmentId" class="form-select" style="margin-left: 20px" required>
             <option value="" hidden selected disabled>Select treatment..</option>
             <optgroup label="Procedures">
                 <c:forEach items="${procedures}" var="var">
@@ -33,33 +32,36 @@
                 </c:forEach>
             </optgroup>
         </select>
+        </label>
         <c:forEach items="${weekdays}" var="day" varStatus="i">
             <div class="inputGroup">
                 <input id="option${i.count}" name="days[]" type="checkbox" value="${day}"/>
                 <label for="option${i.count}">${day}</label>
             </div>
         </c:forEach>
-
-        <c:forEach items="${timesOfDay}" var="time">
-            <label><input type="checkbox" class="form-checkbox" name="times[]" value="${time}">${time}</label><br>
+        <div>Select time (optional)</div>
+        <c:forEach items="${timesOfDay}" var="time" varStatus="i">
+            <div class="inputGroup">
+                <input id="timeOption${i.count}" name="times[]" type="checkbox" value="${time}"/>
+                <label for="timeOption${i.count}">${time}</label>
+            </div>
         </c:forEach>
 
-        <form:label path="duration" required="true">Duration (weeks)</form:label>
-        <form:input path="duration" cssClass="form-input" required="true"/>
-        <form:errors path="duration" cssClass="form-input err"/>
+        <label for="duration">Duration in weeks:</label>
+        <input id="duration" class="form-input" type="number" min="1" max="10" step="1" name="duration" placeholder="1" required/>
         <br>
-        <form:label path="dose">Dose (for medication only)</form:label>
-        <form:input path="dose" cssClass="form-input"/>
-        <form:errors path="dose" cssClass="form-input err"/>
+        <label for="dose">Dose (for medications only):</label>
+        <input id="dose" class="form-input" type="text" name="dose"/>
 
         <input type="hidden" name="patientId" value="${patient.id}"/>
         <input type="hidden" name="oldAppointmentId" value="${oldAppointment.id}"/>
-        <button type="submit" class="form-submit">Save changes</button>
-    </div>
-</form:form>
-<form action="${pageContext.request.contextPath}/patients" method="get">
-    <button type="submit" class="form-submit">Cancel</button>
-</form>
+        <button type="submit" class="form-submit" style="display: inline">Save changes</button>
+    </form>
+    <form action="${pageContext.request.contextPath}/patients" method="get" class="form-button-inline-right">
+        <button type="submit" class="table-button cancel">Cancel</button>
+    </form>
+</div>
+
 <%@ include file="/WEB-INF/views/layouts/_footer.jsp" %>
 
 </body>

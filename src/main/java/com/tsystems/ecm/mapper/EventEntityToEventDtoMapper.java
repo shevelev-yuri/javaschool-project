@@ -29,6 +29,9 @@ public class EventEntityToEventDtoMapper {
 
         dst.setScheduledDatetime(src.getScheduledDatetime());
         dst.setEventStatus(src.getEventStatus());
+        if (src.getCancelReason() != null && !src.getCancelReason().isEmpty()) {
+            dst.setCancelReason(src.getCancelReason());
+        }
         dst.setAppointmentIdCreatedBy(src.getAppointmentIdCreatedBy());
 
         return dst;

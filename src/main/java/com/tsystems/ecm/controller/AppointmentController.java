@@ -35,6 +35,7 @@ public class AppointmentController {
     private static final String EVENING = "Evening";
 
     private static final String REDIRECT_APPOINTMENTS = "redirect:/appointments/appointments";
+    public static final String REDIRECT_PATIENTS = "redirect:/patients";
 
     private TreatmentService treatmentService;
 
@@ -45,7 +46,6 @@ public class AppointmentController {
     private RegimenProcessorService regimenProcessorService;
 
     private EventService eventService;
-
 
     @Autowired
     public AppointmentController(TreatmentService treatmentService,
@@ -66,8 +66,12 @@ public class AppointmentController {
         ModelAndView mv = new ModelAndView("appointments/add");
         PatientDto patient;
         if (patientId != null && !patientId.isEmpty()) {
-            patient = patientService.get(Long.parseLong(patientId));
+            patient = parsePatientId(patientId);
+            if (patient == null) {
+                return new ModelAndView(REDIRECT_PATIENTS);
+            }
         } else {
+            if (patientPrev == null || patientPrev.getName() == null) return new ModelAndView(REDIRECT_PATIENTS);
             patient = patientService.get(patientPrev.getId());
         }
         mv.addObject(PATIENT, patient);
@@ -80,14 +84,18 @@ public class AppointmentController {
     }
 
     @PostMapping("/add")
-    public ModelAndView addAppointment(@ModelAttribute("appointment") AppointmentDto appointment,
-                                       @RequestParam(value = "patientId", required = false) String patientId,
-                                       @RequestParam("treatmentId") String treatmentId,
-                                       @RequestParam("days[]") String[] weekdays,
+    public ModelAndView addAppointment(@RequestParam("treatmentId") String treatmentId,
+                                       @RequestParam("patientId") String patientId,
+                                       @RequestParam(value = "days[]", required = false) String[] weekdays,
                                        @RequestParam(value = "times[]", required = false) String[] times,
+                                       @RequestParam(value = "duration", required = false) String duration,
+                                       @RequestParam(value = "dose", required = false) String dose,
                                        RedirectAttributes redirectAttributes) {
-        initAppointmentDto(appointment, treatmentId, patientId, weekdays, times, redirectAttributes);
-        //TODO custom validation
+        AppointmentDto appointment;
+        appointment = initAppointmentDto(treatmentId, patientId, weekdays, times, duration, dose, redirectAttributes);
+        if (appointment == null) {
+            return new ModelAndView(REDIRECT_PATIENTS);
+        }
         appointment.setId(appointmentService.addOrUpdateAppointment(appointment));
 
         List<EventDto> events = regimenProcessorService.parseRegimen(appointment, true);
@@ -105,17 +113,19 @@ public class AppointmentController {
                                Model model) {
         PatientDto patient;
         if (patientId != null && !patientId.isEmpty()) {
-            patient = patientService.get(Long.parseLong(patientId));
-            if (patient == null) return "redirect:/patients";
-            model.addAttribute(PATIENT, patient);
+            patient = parsePatientId(patientId);
+            if (patient == null) {
+                return REDIRECT_PATIENTS;
+            }
         } else {
-            if (patientPrev == null || patientPrev.getName() == null) return "redirect:/patients";
+            if (patientPrev == null || patientPrev.getName() == null) return REDIRECT_PATIENTS;
             patient = patientService.get(patientPrev.getId());
         }
 
         List<AppointmentDto> appointments = appointmentService.getAllByPatientId(patient.getId());
         appointments.forEach(appointment -> regimenProcessorService.parseRegimen(appointment, false));
 
+        model.addAttribute(PATIENT, patient);
         model.addAttribute("appointments", appointments);
 
         return "appointments/appointments";
@@ -141,8 +151,11 @@ public class AppointmentController {
     public ModelAndView editSelectedForm(@RequestParam("appointmentId") String appointmentId,
                                          @RequestParam("patientId") String patientId) {
         ModelAndView mv = new ModelAndView("appointments/edit");
-        PatientDto patient;
-        patient = patientService.get(Long.parseLong(patientId));
+
+        PatientDto patient = parsePatientId(patientId);
+        if (patient == null) {
+            return new ModelAndView(REDIRECT_PATIENTS);
+        }
         mv.addObject(PATIENT, patient);
 
         initAppointmentForm(mv);
@@ -156,15 +169,20 @@ public class AppointmentController {
     }
 
     @PostMapping("/edit")
-    public ModelAndView editAppointment(@ModelAttribute("newAppointment") AppointmentDto newAppointment,
-                                        @RequestParam(value = "patientId", required = false) String patientId,
+    public ModelAndView editAppointment(@RequestParam(value = "patientId", required = false) String patientId,
                                         @RequestParam("treatmentId") String treatmentId,
                                         @RequestParam("oldAppointmentId") String appointmentId,
-                                        @RequestParam("days[]") String[] weekdays,
+                                        @RequestParam(value = "days[]", required = false) String[] weekdays,
                                         @RequestParam(value = "times[]", required = false) String[] times,
+                                        @RequestParam(value = "duration", required = false) String duration,
+                                        @RequestParam(value = "dose", required = false) String dose,
                                         RedirectAttributes redirectAttributes) {
-        initAppointmentDto(newAppointment, treatmentId, patientId, weekdays, times, redirectAttributes);
-        //TODO custom validation
+        AppointmentDto newAppointment;
+        newAppointment = initAppointmentDto(treatmentId, patientId, weekdays, times, duration, dose, redirectAttributes);
+        if (newAppointment == null) {
+            return new ModelAndView(REDIRECT_APPOINTMENTS);
+        }
+
         long id = Long.parseLong(appointmentId);
         newAppointment.setId(id);
         eventService.setCancelledByAppointmentId(id);
@@ -184,8 +202,17 @@ public class AppointmentController {
     }
 
     //---------------------------------------------------------------------------------------------------------------
-    private void initAppointmentDto(AppointmentDto appointmentDto, String treatmentId, String patientId, String[] weekdays, String[] times, RedirectAttributes redirectAttributes) {
+
+    private AppointmentDto initAppointmentDto(String treatmentId, String patientId,
+                                              String[] weekdays, String[] times, String duration, String dose,
+                                              RedirectAttributes redirectAttributes) {
+        AppointmentDto appointmentDto = new AppointmentDto();
+
         TreatmentDto treatment = treatmentService.get(Long.parseLong(treatmentId));
+        if (!validateForm(treatment.getTreatmentType(), weekdays, duration, dose)) {
+            return null;
+        }
+
         appointmentDto.setTreatment(treatment);
         appointmentDto.setType(treatment.getTreatmentType());
 
@@ -194,17 +221,50 @@ public class AppointmentController {
         redirectAttributes.addFlashAttribute(PATIENT, patient);
 
         StringBuilder regimenStringBuilder = new StringBuilder();
-        if (weekdays.length > 0 && weekdays.length < 8) {
-            regimenStringBuilder.append(String.join(" ", weekdays));
-        } else {
-            //TODO handle when none of the weekday checkboxes is selected
-            log.warn("Something strange happened!");
-        }
+        regimenStringBuilder.append(String.join(" ", weekdays));
 
         if (times != null && times.length > 0) {
             regimenStringBuilder.append("_").append(String.join(" ", times));
         }
         appointmentDto.setRegimen(regimenStringBuilder.toString());
+
+        appointmentDto.setDuration(Integer.parseInt(duration));
+
+        if (appointmentDto.getType() == TreatmentType.MEDICATION) {
+            appointmentDto.setDose(dose);
+        }
+
+        return appointmentDto;
+    }
+    private boolean validateForm(TreatmentType treatmentType, String[] weekdays, String duration, String dose) {
+        if (weekdays == null) return false;
+
+        try {
+            int dur = Integer.parseInt(duration);
+            if (dur > 10 || dur < 1) {
+                return false;
+            }
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        if (treatmentType == TreatmentType.MEDICATION && (dose == null || dose.isEmpty())) return false;
+
+        return true;
+    }
+
+    private PatientDto parsePatientId(String patientId) {
+        PatientDto patient;
+        long id;
+        try {
+            id = Long.parseLong(patientId);
+            patient = patientService.get(id);
+            if (patient == null) {
+                return null;
+            }
+        } catch (NumberFormatException nfe) {
+            return null;
+        }
+        return patient;
     }
 
     private void initAppointmentForm(ModelAndView mv) {
@@ -226,5 +286,4 @@ public class AppointmentController {
         mv.addObject("weekdays", daysOfWeek);
         mv.addObject("timesOfDay", new String[]{MORNING, AFTERNOON, EVENING});
     }
-
 }

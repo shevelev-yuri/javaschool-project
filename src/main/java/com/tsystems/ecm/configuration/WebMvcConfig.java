@@ -1,5 +1,8 @@
 package com.tsystems.ecm.configuration;
 
+import com.tsystems.ecm.interceptor.RequestParamsInterceptor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -22,8 +25,11 @@ import java.util.Locale;
 @ComponentScan("com.tsystems.ecm.controller")
 public class WebMvcConfig implements WebMvcConfigurer {
 
+    private static final Logger log = LogManager.getLogger(WebMvcConfig.class);
+
     @Bean
     public InternalResourceViewResolver setupViewResolver() {
+        log.debug("Setting InternalResourceViewResolver prefix and suffix");
         InternalResourceViewResolver resolver = new InternalResourceViewResolver();
         resolver.setPrefix("/WEB-INF/views/");
         resolver.setSuffix(".jsp");
@@ -34,6 +40,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        log.debug("Registering resource handler for static resources");
         registry
                 .addResourceHandler("/resources/**")
                 .addResourceLocations("/WEB-INF/resources/");
@@ -41,8 +48,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        log.debug("Registering request parameters interceptor");
+        registry.addInterceptor(requestParamsInterceptor());
+
+        log.debug("Registering locale interceptor");
         LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
-        localeChangeInterceptor.setParamName("lang");
+        localeChangeInterceptor.setParamName("locale");
         registry.addInterceptor(localeChangeInterceptor);
     }
 
@@ -61,5 +72,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
         messageSource.setDefaultEncoding("UTF-8");
         messageSource.setCacheSeconds(0);
         return messageSource;
+    }
+
+    @Bean
+    public RequestParamsInterceptor requestParamsInterceptor() {
+        return new RequestParamsInterceptor();
     }
 }

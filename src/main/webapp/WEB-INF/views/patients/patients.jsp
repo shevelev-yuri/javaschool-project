@@ -10,9 +10,6 @@
 </head>
 <body>
 <%@include file="/WEB-INF/views/layouts/_header.jsp" %>
-
-<a href="/ecm/patients/add">Add new patient</a>
-<br>
 <div class="table-post-div" style="overflow-x:auto;">
     <table>
         <thead>
@@ -71,7 +68,7 @@
                     <c:choose>
                         <c:when test="${patient.patientStatus == 'ON_TREATMENT'}">
                             <form method="get" action="patients/discharge">
-                                <button type="submit" name="patientId" class="table-button sml"  value="${patient.id}">Discharge</button>
+                                <button type="submit" name="patientId" class="table-button sml cancel"  value="${patient.id}">Discharge</button>
                             </form>
                         </c:when>
                         <c:otherwise>

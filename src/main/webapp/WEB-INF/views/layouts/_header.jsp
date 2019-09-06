@@ -23,7 +23,7 @@
                 </sec:authorize>
                 <sec:authorize access="hasAuthority('NURSE')">
                     <li class="nav-item">
-                        <a class="nav-link" href="/ecm/events/eventsall">Events</a>
+                        <a class="nav-link" href="/ecm/events/events">Events</a>
                     </li>
                 </sec:authorize>
             </ul>
