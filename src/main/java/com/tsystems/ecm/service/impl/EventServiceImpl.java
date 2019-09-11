@@ -106,10 +106,13 @@ public class EventServiceImpl implements EventService {
         List<Event> entities = eventDao.getAllToday();
         List<EventDtoRest> dtos = new ArrayList<>();
         for (Event event : entities) {
+            String statusStr = event.getEventStatus().toString();
+            String status = statusStr.substring(0, 1).toUpperCase() + statusStr.substring(1).toLowerCase();
+
             EventDtoRest eventDto = new EventDtoRest(
                     event.getPatient().getName(),
                     event.getScheduledDatetime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm eeee").withLocale(Locale.ENGLISH)),
-                    event.getEventStatus().name(),
+                    status,
                     event.getTreatment().getTreatmentName(),
                     event.getCancelReason());
             dtos.add(eventDto);

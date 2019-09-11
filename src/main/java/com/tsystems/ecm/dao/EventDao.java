@@ -164,8 +164,8 @@ public class EventDao extends AbstractDao<Event> {
     }
 
     /**
-     * Overloaded method for REST requests.
-     * <p></p>
+     * <p>Overloaded method for REST requests.</p>
+     *
      * Gets the list containing all events, scheduled for today.
      *
      * @return the {@code List} containing all events, scheduled for today

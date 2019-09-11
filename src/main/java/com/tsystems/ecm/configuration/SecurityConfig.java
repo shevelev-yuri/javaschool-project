@@ -50,11 +50,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         log.debug("Spring Security initialized.");
         http
+                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/patients*/**").hasAuthority("DOCTOR")
                 .antMatchers("/events*/**").hasAuthority("NURSE")
                 .antMatchers("/admin*/**").hasAuthority("ADMIN")
-                .antMatchers("/login*").permitAll()
+/*                .antMatchers("/login*").permitAll()*/
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().accessDeniedPage("/error/error403")

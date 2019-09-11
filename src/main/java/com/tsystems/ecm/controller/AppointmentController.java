@@ -176,10 +176,10 @@ public class AppointmentController {
         if (patientId != null && !patientId.isEmpty()) {
             patient = parsePatientId(patientId);
             if (patient == null) {
-                return REDIRECT_ERROR400;
+                return REDIRECT_APPOINTMENTS;
             }
         } else {
-            if (patientPrev == null || patientPrev.getName() == null) return REDIRECT_ERROR400;
+            if (patientPrev == null || patientPrev.getName() == null) return REDIRECT_APPOINTMENTS;
             patient = patientService.get(patientPrev.getId());
         }
 

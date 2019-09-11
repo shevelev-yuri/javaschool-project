@@ -116,8 +116,8 @@ public class EventController {
      *
      * @param eventId            the event's id
      * @param patientId          the patient's id
-     * @param filter             the filter
      * @param page               the page
+     * @param filter             the filter
      * @param redirectAttributes the RedirectAttributes reference
      * @return the all events page
      */
@@ -141,11 +141,11 @@ public class EventController {
     /**
      * Handles event's status changing to "Cancelled".
      *
-     * @param eventId            the event's id
-     * @param patientId          the patient's id
-     * @param filter             the filter
-     * @param page               the page
-     * @param reason             the cancellation reason
+     * @param patientId the patient's id
+     * @param eventId the event's id
+     * @param page the page
+     * @param filter the filter
+     * @param reason the cancellation reason
      * @param redirectAttributes the RedirectAttributes reference
      * @return the all events page
      */

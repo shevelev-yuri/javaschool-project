@@ -30,7 +30,7 @@ public class JmsPublisher {
     /**
      * All args constructor.
      *
-     * @param jmsTemplate
+     * @param jmsTemplate the JmsPublisher reference
      */
     @Autowired
     public JmsPublisher(JmsTemplate jmsTemplate) {
@@ -45,7 +45,10 @@ public class JmsPublisher {
     public void sendMessage(String message) {
         log.debug("Sending: {}", message);
 
-        jmsTemplate.send(TOPIC_NAME, session -> session.createTextMessage(message));
+        try {
+            jmsTemplate.send(TOPIC_NAME, session -> session.createTextMessage(message));
+        } catch (Exception ignored) {
+        }
     }
 
 }

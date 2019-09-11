@@ -27,8 +27,15 @@
                 </sec:authorize>
             </ul>
             <div class="lang-set">
-                <a href="?lang=en"><img id="en" alt="" src="${pageContext.request.contextPath}/resources/static/img/uk.png"/></a>
-                <a href="?lang=ru"><img id="ru" alt="" src="${pageContext.request.contextPath}/resources/static/img/ru.png"/></a>
+                <a href="<c:url value=""><c:set var="name" value="lang"/><c:set var="value" value="en"/><c:forEach items="${paramValues}" var="params"><c:choose><c:when test="${params.key == name}">
+                <c:param name="${name}" value="${value}"/></c:when><c:otherwise><c:forEach items="${params.value}" var="val"><c:param name="${params.key}" value="${val}"/></c:forEach></c:otherwise>
+                </c:choose></c:forEach><c:if test="${empty param[name] }"><c:param name="${name}" value="${value}"/></c:if></c:url>">
+                    <img id='en' alt='' src='${pageContext.request.contextPath}/resources/static/img/uk.png'/></a>
+
+                <a href="<c:url value=""><c:set var="value2" value="ru"/><c:forEach items="${paramValues}" var="params"><c:choose><c:when test="${params.key == name}"><c:param name="${name}" value="${value2}"/>
+                 </c:when><c:otherwise><c:forEach items="${params.value}" var="val"><c:param name="${params.key}" value="${val}"/></c:forEach></c:otherwise></c:choose></c:forEach><c:if test="${empty param[name] }">
+                 <c:param name="${name}" value="${value2}"/></c:if></c:url>">
+                    <img id="ru" alt="" src="${pageContext.request.contextPath}/resources/static/img/ru.png"/></a>
             </div>
             <sec:authorize access="isAuthenticated()">
                 <span class="navbar-text"> <sec:authentication property="name"/> | <a

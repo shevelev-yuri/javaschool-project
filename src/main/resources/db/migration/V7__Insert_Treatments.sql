@@ -4,6 +4,6 @@ values ('Aspirin','MEDICATION'),
        ('Betamethasone','MEDICATION'),
 
        ('Physiotherapy','PROCEDURE'),
-       ('Plasmapheresis','PROCEDURE'),
-       ('Electrocardiography','PROCEDURE')
+       ('Hydrotherapy','PROCEDURE'),
+       ('Progressive mobilisation','PROCEDURE')
 ;

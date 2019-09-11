@@ -212,6 +212,12 @@
             <version>6.0.17.Final</version>
         </dependency>
 
+        <dependency>
+            <groupId>javax.interceptor</groupId>
+            <artifactId>javax.interceptor-api</artifactId>
+            <version>1.2.2</version>
+        </dependency>
+
         <!--Testing-->
         <dependency>
             <groupId>org.springframework</groupId>

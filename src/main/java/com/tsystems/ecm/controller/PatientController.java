@@ -65,6 +65,7 @@ public class PatientController {
      * @param patientService          the PatientService reference
      * @param appointmentService      the AppointmentService reference
      * @param regimenProcessorService the RegimenProcessorService reference
+     * @param userService             the UserService reference
      * @param eventService            the EventService reference
      */
     @Autowired
