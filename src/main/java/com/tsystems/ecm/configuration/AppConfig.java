@@ -24,7 +24,6 @@ public class AppConfig {
 
     private static final Logger log = LogManager.getLogger(AppConfig.class);
 
-
     @Autowired
     private Environment environment;
 

@@ -4,6 +4,7 @@ html {
 }
 
 .container {
+    text-align: left;
     margin-right: 40px;
     margin-left: 0px;
     padding-left: 40px;
@@ -203,7 +204,7 @@ label {
 }
 
 .table-button.sml {
-    width: 82px;
+    width: 88px;
 }
 
 .table-button:hover {
@@ -357,4 +358,18 @@ label {
 .form-button-inline-right {
     display: inline;
     float: right;
+}
+
+.label-disc {
+    display: block;
+    padding: 5px 0;
+}
+
+.btn-mybutton {
+    background-color: #4e555b;
+}
+
+.lang-set {
+    display: inline;
+    padding: 5px 15px;
 }

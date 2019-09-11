@@ -6,6 +6,8 @@ import com.tsystems.ecm.entity.Appointment;
 import com.tsystems.ecm.mapper.AppointmentDtoToAppointmentEntityMapper;
 import com.tsystems.ecm.mapper.AppointmentEntityToAppointmentDtoMapper;
 import com.tsystems.ecm.service.AppointmentService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,15 +15,42 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Basic implementation of the <tt>AppointmentService</tt> interface.
+ *
+ * @author Yurii Shevelev
+ * @version 1.0.0
+ */
 @Service
 public class AppointmentServiceImpl implements AppointmentService {
 
+    /**
+     * Log4j logger.
+     */
+    private static final Logger log = LogManager.getLogger(AppointmentServiceImpl.class);
+
+    /**
+     * The AppointmentDao reference.
+     */
     private AppointmentDao appointmentDao;
 
+    /**
+     * The AppointmentDtoToAppointmentEntityMapper reference.
+     */
     private AppointmentDtoToAppointmentEntityMapper toAppointmentEntityMapper;
 
+    /**
+     * The AppointmentEntityToAppointmentDtoMapper reference.
+     */
     private AppointmentEntityToAppointmentDtoMapper toAppointmentDtoMapper;
 
+    /**
+     * All args constructor.
+     *
+     * @param appointmentDao            the AppointmentDao reference
+     * @param toAppointmentEntityMapper the AppointmentDtoToAppointmentEntityMapper reference
+     * @param toAppointmentDtoMapper    the AppointmentEntityToAppointmentDtoMapper reference
+     */
     @Autowired
     public AppointmentServiceImpl(AppointmentDao appointmentDao,
                                   AppointmentDtoToAppointmentEntityMapper toAppointmentEntityMapper,
@@ -31,15 +60,10 @@ public class AppointmentServiceImpl implements AppointmentService {
         this.toAppointmentDtoMapper = toAppointmentDtoMapper;
     }
 
-    /**
-     * Calls the appropriate DAO to save or update the {@code appointmentDto} and returns its {@code id}.
-     *
-     * @param appointmentDto Appointment DTO to be saved or updated in database
-     * @return the {@code id} of saved or updated appointment entity.
-     */
     @Override
     @Transactional
     public long addOrUpdateAppointment(AppointmentDto appointmentDto) {
+        log.trace("addOrUpdateAppointment method called");
         Appointment appointment;
         if (appointmentDto.getId() != 0) {
             appointment = appointmentDao.get(appointmentDto.getId());
@@ -53,47 +77,34 @@ public class AppointmentServiceImpl implements AppointmentService {
             appointment = toAppointmentEntityMapper.map(appointmentDto);
         }
         appointmentDao.save(appointment);
+
         return appointment.getId();
     }
 
-    /**
-     * Calls the appropriate DAO to retrieve the appointment by its {@code id}.
-     *
-     * @param id the id of the appointment
-     * @return requested Appointment DTO
-     */
     @Override
     @Transactional
     public AppointmentDto get(long id) {
+        log.trace("get method called");
+
         return toAppointmentDtoMapper.map(appointmentDao.get(id));
     }
 
-    /**
-     * Calls the appropriate DAO to retrieve a {@code List} containing all appointments DTOs
-     * of the patient with {@code id}.
-     *
-     * @param id the id of the patient
-     * @return a {@code List} that contains all appointments of the specified patient
-     */
     @Override
     @Transactional
     public List<AppointmentDto> getAllByPatientId(long id) {
+        log.trace("getAllByPatientId method called");
         List<Appointment> entities = appointmentDao.getAllByPatientId(id);
 
         return entities.stream().map(toAppointmentDtoMapper::map).collect(Collectors.toList());
     }
 
-    /**
-     * Permanently removes appointment from database.
-     *
-     * @param id the id of the appointment to be removed
-     */
     @Override
     @Transactional
     public void cancelAppointmentById(long id) {
+        log.trace("cancelAppointmentById method called");
+
         //TODO change logic - implement status change instead of removal
         Appointment appointmentToDelete = appointmentDao.get(id);
         appointmentDao.delete(appointmentToDelete);
     }
-
 }

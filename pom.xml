@@ -79,7 +79,6 @@
             <version>${org.springframework-security-version}</version>
         </dependency>
 
-
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-config</artifactId>
@@ -162,13 +161,12 @@
             <version>5.15.9</version>
         </dependency>
 
-        <!--Json databind-->
+        <!--Json-->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.10.0.pr1</version>
         </dependency>
-
 
         <!--Lombok-->
         <dependency>
@@ -219,6 +217,13 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
             <version>${org.springframework-version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <version>5.1.6.RELEASE</version>
             <scope>test</scope>
         </dependency>
 

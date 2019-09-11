@@ -9,8 +9,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.Map;
 
+/**
+ * This interceptor logs requests parameters for development purpose
+ */
 public class RequestParamsInterceptor implements HandlerInterceptor {
 
+    /**
+     * Log4j logger.
+     */
     private static final Logger log = LogManager.getLogger(RequestParamsInterceptor.class);
 
     @Override

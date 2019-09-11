@@ -5,13 +5,28 @@ import com.tsystems.ecm.entity.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * Mapper class
+ */
 @Component
 public class EventDtoToEventEntityMapper {
 
+    /**
+     * The PatientDtoToPatientEntityMapper reference to handle patient mapping.
+     */
     private PatientDtoToPatientEntityMapper toPatientEntityMapper;
 
+    /**
+     * The TreatmentDtoToTreatmentEntityMapper reference to handle treatment mapping.
+     */
     private TreatmentDtoToTreatmentEntityMapper toTreatmentEntityMapper;
 
+    /**
+     * All args constructor.
+     *
+     * @param toPatientEntityMapper   the PatientDtoToPatientEntityMapper
+     * @param toTreatmentEntityMapper the TreatmentDtoToTreatmentEntityMapper reference
+     */
     @Autowired
     public EventDtoToEventEntityMapper(PatientDtoToPatientEntityMapper toPatientEntityMapper,
                                        TreatmentDtoToTreatmentEntityMapper toTreatmentEntityMapper) {
@@ -19,6 +34,12 @@ public class EventDtoToEventEntityMapper {
         this.toTreatmentEntityMapper = toTreatmentEntityMapper;
     }
 
+    /**
+     * Maps DTO to entity.
+     *
+     * @param src the source DTO to map from
+     * @return the entity to map to
+     */
     public Event map(EventDto src) {
         Event dst = new Event();
 

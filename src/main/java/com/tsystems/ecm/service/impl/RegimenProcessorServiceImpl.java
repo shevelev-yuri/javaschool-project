@@ -18,47 +18,48 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import static com.tsystems.ecm.utils.StringConstants.*;
 import static java.time.temporal.TemporalAdjusters.next;
 
+/**
+ * Basic implementation of the <tt>RegimenProcessorService</tt> interface.
+ *
+ * @author Yurii Shevelev
+ * @version 1.0.0
+ */
 @Service
 public class RegimenProcessorServiceImpl implements RegimenProcessorService {
 
+    /**
+     * Log4j logger.
+     */
     private static final Logger log = LogManager.getLogger(RegimenProcessorServiceImpl.class);
 
-    private static final String REGIMEN_IS_NOT_SPECIFIED = "Regimen is not specified.";
-    private static final String DURATION_IS_NOT_SPECIFIED = "Duration is not specified";
-
-    private static final String EVERY_DAY = "Every day";
-    private static final String TIMES_A_WEEK = "times a week";
-    private static final String AND = " and ";
-    private static final String FOR = " for ";
-    private static final String WEEKS = " week(s)";
-    private static final String ONCE_A_WEEK = "Once a week";
-    private static final String ON = " on ";
-
+    @Override
     public List<EventDto> parseRegimen(AppointmentDto appointmentDto, boolean generateEvents) {
+        log.trace("parseRegimen method called");
         String regimen = appointmentDto.getRegimen();
         if (regimen == null || regimen.isEmpty()) {
-            //TODO Handle
             log.error(REGIMEN_IS_NOT_SPECIFIED);
 
             return Collections.emptyList();
         }
         int duration = appointmentDto.getDuration();
         if (duration == 0) {
-            //TODO Handle
             log.error(DURATION_IS_NOT_SPECIFIED);
 
             return Collections.emptyList();
         }
 
-        //TODO add a map to check if this regimen has been parsed before and take regimenString from there,
-        // if not - parse it and add it to map
-
+        //Days of week array
         String[] days;
+        //Time points array
         String[] times = null;
-        String timeString;
+        //String for days of week representation
         String dayString;
+        //String for time points representation
+        String timeString;
+        //Final representation string
         String regimenString;
 
         //If time of day is not present
@@ -91,16 +92,21 @@ public class RegimenProcessorServiceImpl implements RegimenProcessorService {
             }
         }
 
+        //Add duration
         regimenString += FOR + duration + WEEKS;
+
+        //Finally, set appointment regimenString field
         appointmentDto.setRegimenString(regimenString);
 
-
+        //Generate events part
         if (generateEvents) {
 
+            //List to hold generated events
             List<EventDto> events = new ArrayList<>();
+            //LocalDateTime list for generated events
             List<LocalDateTime> nextEventsDateTimes = new ArrayList<>();
 
-            createEvents(days, times, duration, nextEventsDateTimes);
+            fillLocalDateTimeList(days, times, duration, nextEventsDateTimes);
             addEvents(appointmentDto, events, nextEventsDateTimes);
 
             return events;
@@ -109,36 +115,12 @@ public class RegimenProcessorServiceImpl implements RegimenProcessorService {
         return Collections.emptyList();
     }
 
-    private void addEvents(AppointmentDto appointmentDto, List<EventDto> events, List<LocalDateTime> nextEventsDateTimes) {
-        for (LocalDateTime eventDay : nextEventsDateTimes) {
-            EventDto eventDto = new EventDto();
-            eventDto.setPatient(appointmentDto.getPatient());
-            eventDto.setTreatment(appointmentDto.getTreatment());
-            eventDto.setEventStatus(EventStatus.SCHEDULED);
-            eventDto.setScheduledDatetime(eventDay);
+//----------Helper methods that tries to reduce complexity----------
 
-            events.add(eventDto);
-        }
-    }
+    /*Fills the nextEventsDateTimes list by parsing days[], times[] and duration*/
+    private void fillLocalDateTimeList(String[] days, String[] times, int duration, List<LocalDateTime> nextEventsDateTimes) {
 
-    private String transformString(String[] src) {
-        StringBuilder dst = new StringBuilder();
-        if (src.length == 1) {
-            return src[0];
-        }
-
-        for (int i = 0; i < src.length - 1; i++) {
-            if (i < src.length - 2) {
-                dst.append(src[i]).append(", ");
-            } else {
-                dst.append(src[i]).append(AND).append(src[i + 1]);
-            }
-        }
-        return dst.toString();
-    }
-
-    private void createEvents(String[] days, String[] times, int duration, List<LocalDateTime> nextEventsDateTimes) {
-        //Parse times[] to List<LocalTime>, if present
+        //Parse times points array to List<LocalTime>, if present
         List<LocalTime> localTimes = null;
         if (times != null) {
             localTimes = new ArrayList<>(times.length);
@@ -155,9 +137,22 @@ public class RegimenProcessorServiceImpl implements RegimenProcessorService {
 
         //Create the right number of LocalDateTime instances for each day (and for each time of day, if present)
         createDateTimes(days, times, duration, nextEventsDateTimes, localTimes);
-
     }
 
+    /*Creates events DTOs from LocalDateTime instances and puts them into events list*/
+    private void addEvents(AppointmentDto appointmentDto, List<EventDto> events, List<LocalDateTime> nextEventsDateTimes) {
+        for (LocalDateTime eventDay : nextEventsDateTimes) {
+            EventDto eventDto = new EventDto();
+            eventDto.setPatient(appointmentDto.getPatient());
+            eventDto.setTreatment(appointmentDto.getTreatment());
+            eventDto.setEventStatus(EventStatus.SCHEDULED);
+            eventDto.setScheduledDatetime(eventDay);
+
+            events.add(eventDto);
+        }
+    }
+
+    /*Parses arrays and duration and fills up the nextEventsDateTimes list with LocalDateTime instances*/
     private void createDateTimes(String[] days, String[] times, int duration, List<LocalDateTime> nextEventsDateTimes, List<LocalTime> localTimes) {
         LocalDate today = LocalDate.now();
         for (int i = 0; i < duration; i++) {
@@ -184,9 +179,28 @@ public class RegimenProcessorServiceImpl implements RegimenProcessorService {
         }
     }
 
+    /*Logic to include events that should be scheduled after the present time for today
+    * eg. if it's 17:00 now and the appointment has morning, afternoon, and evening, then only one event will be generated (for the evening 19:00)*/
     private void addingTodayEvents(List<LocalDateTime> nextEventsDateTimes, int i, LocalTime localTime, String day) {
         if (LocalDateTime.now().with(localTime).isAfter(LocalDateTime.now()) && i == 0 && day.equals(LocalDateTime.now().format(DateTimeFormatter.ofPattern("eeee").withLocale(Locale.ENGLISH)))) {
             nextEventsDateTimes.add(LocalDateTime.now().with(localTime));
         }
+    }
+
+    /*Builds the string with punctuation*/
+    private String transformString(String[] src) {
+        StringBuilder dst = new StringBuilder();
+        if (src.length == 1) {
+            return src[0];
+        }
+
+        for (int i = 0; i < src.length - 1; i++) {
+            if (i < src.length - 2) {
+                dst.append(src[i]).append(", ");
+            } else {
+                dst.append(src[i]).append(AND).append(src[i + 1]);
+            }
+        }
+        return dst.toString();
     }
 }

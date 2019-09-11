@@ -15,26 +15,20 @@ import javax.validation.constraints.Size;
 @ToString
 public class PatientDto {
 
-    private static final String MUST_BE_SPECIFIED = "must be specified!";
-    private static final String NAME_SIZE = "must be at least 1 and no more than 50 characters!";
-    private static final String DIAGNOSIS_SIZE = "must be no longer than 100 characters!";
-    private static final String INSURANCE_NUMBER_FORMAT = "format is \"###-####-####\" # - [0...9]!";
-    private static final String TREATING_DOCTOR_NOT_SELECTED = "Treating doctor not selected!";
-
     private long id;
 
-    @NotBlank(message = MUST_BE_SPECIFIED)
-    @Size(max = 50, message = NAME_SIZE)
+    @NotBlank(message = "{message.mustBeSpecified}")
+    @Size(max = 50, message = "{message.nameSize}")
     private String name;
 
-    @NotBlank(message = MUST_BE_SPECIFIED)
-    @Size(max = 100, message = DIAGNOSIS_SIZE)
+    @NotBlank(message = "{message.mustBeSpecified}")
+    @Size(max = 100, message = "{message.diagnosisSize}")
     private String diagnosis;
 
-    @Pattern(regexp = "[0-9]{3}-[0-9]{4}-[0-9]{3}$", message = MUST_BE_SPECIFIED + ", " + INSURANCE_NUMBER_FORMAT)
+    @Pattern(regexp = "[0-9]{3}-[0-9]{4}-[0-9]{3}$", message = "{message.mustBeSpecified}" + " " + "{message.insuranceNumberFormat}")
     private String insuranceNumber;
 
-    @NotBlank(message = TREATING_DOCTOR_NOT_SELECTED)
+    @NotBlank(message = "{message.doctorNotSelected}")
     private String doctorName;
 
     private PatientStatus patientStatus;

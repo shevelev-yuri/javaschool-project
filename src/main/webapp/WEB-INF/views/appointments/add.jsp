@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spr"%>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -8,6 +9,9 @@
     <%@include file="/WEB-INF/views/layouts/_head.jsp" %>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/static/js/jquery.mousewheel.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/static/js/scroll.js"></script>
+
+    <spr:message code="appointments.procedures" var="proceduresSelect" scope="request"/>
+    <spr:message code="appointments.medications" var="medicationsSelect" scope="request"/>
 
     <title>Form: add appointment</title>
 </head>
@@ -17,44 +21,25 @@
 <%--@elvariable id="appointment" type="com.tsystems.ecm.dto.AppointmentDto"--%>
 <form action="add" method="post">
     <div class="form-post-div">
-        <h3>Add new appointment for patient: ${patient.name}</h3>
-        <label>Treatment<select name="treatmentId" class="form-select" style="margin-left: 20px" required>
-            <option value="" hidden selected disabled>Select treatment..</option>
-            <optgroup label="Procedures">
+        <h3><spr:message code="appointments.addNewAppointmentForPatient"/>: ${patient.name}</h3>
+        <label><spr:message code="appointments.treatment"/><select name="treatmentId" class="form-select" style="margin-left: 20px" required>
+            <option value="" hidden selected disabled><spr:message code="appointments.selectTreatment"/></option>
+            <optgroup label="${proceduresSelect}">
                 <c:forEach items="${procedures}" var="var">
                     <option value="${var.id}">${var.treatmentName}</option>
                 </c:forEach>
             </optgroup>
-            <optgroup label="Medications">
+            <optgroup label="${medicationsSelect}">
                 <c:forEach items="${medications}" var="var">
                     <option value="${var.id}">${var.treatmentName}</option>
                 </c:forEach>
             </optgroup>
         </select>
         </label>
-        <div>Select days</div>
-        <c:forEach items="${weekdays}" var="day" varStatus="i">
-            <div class="inputGroup">
-                <input id="option${i.count}" name="days[]" type="checkbox" value="${day}"/>
-                <label for="option${i.count}">${day}</label>
-            </div>
-        </c:forEach>
-        <div>Select time (optional)</div>
-        <c:forEach items="${timesOfDay}" var="time" varStatus="i">
-            <div class="inputGroup">
-                <input id="timeOption${i.count}" name="times[]" type="checkbox" value="${time}"/>
-                <label for="timeOption${i.count}">${time}</label>
-            </div>
-        </c:forEach>
-
-        <label for="duration">Duration in weeks:</label>
-        <input id="duration" class="form-input" type="number" min="1" max="10" step="1" name="duration" placeholder="1" required/>
+        <div><spr:message code="appointments.selectDays"/></div>
+        <%@include file="/WEB-INF/views/appointments/_options.jsp" %>
         <br>
-        <label for="dose">Dose (for medications only):</label>
-        <input id="dose" class="form-input" type="text" name="dose"/>
-
-        <input type="hidden" name="patientId" value="${patient.id}"/>
-        <button type="submit" class="form-submit">Add appointment</button>
+        <button type="submit" class="table-button"><spr:message code="appointments.addAppointment"/></button>
     </div>
 </form>
 <%@ include file="/WEB-INF/views/layouts/_footer.jsp" %>

@@ -4,9 +4,18 @@ import com.tsystems.ecm.dto.PatientDto;
 import com.tsystems.ecm.entity.Patient;
 import org.springframework.stereotype.Component;
 
+/**
+ * Mapper class
+ */
 @Component
 public class PatientEntityToPatientDtoMapper {
 
+    /**
+     * Maps entity to DTO.
+     *
+     * @param src the source entity to map from
+     * @return the DTO to map to
+     */
     public PatientDto map(Patient src) {
         PatientDto dst = new PatientDto();
 

@@ -17,13 +17,30 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Custom implementation of the Spring <tt>UserDetailsService</tt> interface.
+ *
+ * @author Yurii Shevelev
+ * @version 1.0.0
+ */
 @Service("userDetailsService")
 public class UserDetailsServiceImpl implements UserDetailsService {
 
+    /**
+     * Log4j logger.
+     */
     private static final Logger log = LogManager.getLogger(UserDetailsServiceImpl.class);
 
+    /**
+     * The UserDao reference.
+     */
     private UserDao userDao;
 
+    /**
+     * All args constructor.
+     *
+     * @param userDao the UserDao reference
+     */
     @Autowired
     public UserDetailsServiceImpl(UserDao userDao) {
         this.userDao = userDao;
@@ -32,11 +49,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String login) {
+        log.trace("loadUserByUsername method called");
         User user = userDao.getByLogin(login);
-
         if (user == null) {
             throw new UsernameNotFoundException("No user with login '" + login + "' found!");
-
         }
         UserDetails userDetails = new org.springframework.security.core.userdetails.User(
                 user.getName(), user.getPassword(), true, true, true,
@@ -47,6 +63,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return userDetails;
     }
 
+    /*Helper method that returns List of GrantedAuthorities of the user by user's role field*/
     private List<GrantedAuthority> getAuthority(Role role) {
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(role.name()));

@@ -4,19 +4,40 @@ import com.tsystems.ecm.dto.AppointmentDto;
 import com.tsystems.ecm.entity.Appointment;
 import org.springframework.stereotype.Component;
 
+/**
+ * Mapper class
+ */
 @Component
 public class AppointmentDtoToAppointmentEntityMapper {
 
+    /**
+     * The PatientDtoToPatientEntityMapper reference to handle patient mapping.
+     */
     private PatientDtoToPatientEntityMapper toPatientEntityMapper;
 
+    /**
+     * The TreatmentDtoToTreatmentEntityMapper reference to handle treatment mapping.
+     */
     private TreatmentDtoToTreatmentEntityMapper toTreatmentEntityMapper;
 
+    /**
+     * All args constructor.
+     *
+     * @param toPatientEntityMapper   the PatientDtoToPatientEntityMapper reference
+     * @param toTreatmentEntityMapper the TreatmentDtoToTreatmentEntityMapper reference
+     */
     public AppointmentDtoToAppointmentEntityMapper(PatientDtoToPatientEntityMapper toPatientEntityMapper,
                                                    TreatmentDtoToTreatmentEntityMapper toTreatmentEntityMapper) {
         this.toPatientEntityMapper = toPatientEntityMapper;
         this.toTreatmentEntityMapper = toTreatmentEntityMapper;
     }
 
+    /**
+     * Maps DTO to entity.
+     *
+     * @param src the source DTO to map from
+     * @return the entity to map to
+     */
     public Appointment map(AppointmentDto src) {
         Appointment dst = new Appointment();
 

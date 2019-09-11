@@ -50,12 +50,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         log.debug("Spring Security initialized.");
         http
-                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/patients*/**").hasAuthority("DOCTOR")
                 .antMatchers("/events*/**").hasAuthority("NURSE")
                 .antMatchers("/admin*/**").hasAuthority("ADMIN")
+                .antMatchers("/login*").permitAll()
                 .anyRequest().authenticated()
+                .and()
+                .exceptionHandling().accessDeniedPage("/error/error403")
                 .and()
 
                 .formLogin()
@@ -73,6 +75,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/login?logout=true")
                 .deleteCookies("JSESSIONID")
                 .invalidateHttpSession(true)
+
                 .and()
                 .rememberMe().key("theKey").tokenValiditySeconds(60 * 60 * 24 * 14).tokenRepository(tokenRepository());
     }
