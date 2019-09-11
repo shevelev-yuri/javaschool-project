@@ -8,7 +8,6 @@ import static org.junit.Assert.assertNotEquals;
 
 public class UserTest {
 
-
     private static final long ID = 1;
     private static final String LOGIN = "login";
     private static final String PSWD = "pswd";
