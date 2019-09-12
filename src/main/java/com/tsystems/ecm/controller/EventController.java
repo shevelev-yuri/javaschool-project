@@ -100,7 +100,7 @@ public class EventController {
 
         handleFilterAndPage(mv, patientId, page, filter, patient);
         //Check for bad request
-        if (mv == null) return new ModelAndView(REDIRECT_ERROR400);
+        if (mv.getViewName().equals(REDIRECT_ERROR400)) return mv;
 
         mv.addObject(FORMATTER, DateTimeFormatter.ofPattern(DATETIME_FORMAT).withLocale(Locale.ENGLISH));
 
@@ -236,14 +236,12 @@ public class EventController {
                     events = eventService.getAllByPatientId(Long.parseLong(patientId), pagination.getCurrentPage(), EVENTS_PAGE_SIZE_DEFAULT);
                 } else {
                     //Patient with this ID not found, set modelAndView to null to redirect to error page
-                    mv = null;
-
+                    mv.setViewName(REDIRECT_ERROR400);
                     return;
                 }
             } catch (NumberFormatException nfe) {
                 //Invalid request parameters, set modelAndView to null to redirect to error page
-                mv = null;
-
+                mv.setViewName(REDIRECT_ERROR400);
                 return;
             }
             //Filter: today events
