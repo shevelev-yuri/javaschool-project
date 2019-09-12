@@ -1,7 +1,6 @@
 package com.tsystems.ecm.service;
 
 import com.tsystems.ecm.dto.UserDto;
-import com.tsystems.ecm.entity.User;
 
 import java.util.List;
 
@@ -28,13 +27,13 @@ public interface UserService {
      * @param login the user login
      * @return the user entity or null, if no user found with this {@code username}
      */
-    User getUserByLogin(String login);
+    UserDto getUserByLogin(String login);
 
     /**
      * Registers new user.
      *
      * @param userDto the user DTO to be saved
-     * @return the user entity or null, if user with same login already in use
+     * @return the id for new user, or -1 if user with same login already exists
      */
-    User registerNewUser(UserDto userDto);
+    long registerNewUser(UserDto userDto);
 }

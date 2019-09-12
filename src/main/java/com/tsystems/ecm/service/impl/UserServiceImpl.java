@@ -72,23 +72,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserByLogin(String login) {
+    public UserDto getUserByLogin(String login) {
         log.trace("getUserByLogin method called");
 
-        return userDao.getByLogin(login);
+        return mapper.map(userDao.getByLogin(login));
     }
 
     @Override
-    public User registerNewUser(UserDto userDto) {
+    public long registerNewUser(UserDto userDto) {
         log.trace("registerNewUser method called");
 
         if (loginExists(userDto.getLogin())) {
             log.warn("The user with login '{}' already exists!", userDto.getLogin());
 
-            return null;
+            return -1L;
         }
 
-        final User user = new User();
+        User user = new User();
 
         user.setLogin(userDto.getLogin());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
@@ -96,7 +96,7 @@ public class UserServiceImpl implements UserService {
         user.setRole(userDto.getRole());
         userDao.save(user);
 
-        return user;
+        return user.getId();
     }
 
     /*Helper method that checks whether the user with this login already exists*/

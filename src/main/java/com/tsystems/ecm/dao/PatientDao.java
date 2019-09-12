@@ -1,8 +1,6 @@
 package com.tsystems.ecm.dao;
 
 import com.tsystems.ecm.entity.Patient;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
@@ -16,11 +14,6 @@ import java.util.List;
  */
 @Repository
 public class PatientDao extends AbstractDao<Patient> {
-
-    /**
-     * Log4j logger.
-     */
-    private static final Logger log = LogManager.getLogger(PatientDao.class);
 
     /**
      * HQL query to select all patients.
