@@ -75,14 +75,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
         return messageSource;
     }
 
-/*    @Bean
-    @Override
-    public LocalValidatorFactoryBean getValidator() {
-        LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
-        localValidatorFactoryBean.setValidationMessageSource(messageSource());
-        return localValidatorFactoryBean;
-    }*/
-
     @Bean
     public RequestParamsInterceptor requestParamsInterceptor() {
         return new RequestParamsInterceptor();

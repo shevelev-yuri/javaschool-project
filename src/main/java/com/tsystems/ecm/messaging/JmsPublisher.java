@@ -48,6 +48,7 @@ public class JmsPublisher {
         try {
             jmsTemplate.send(TOPIC_NAME, session -> session.createTextMessage(message));
         } catch (Exception ignored) {
+            //ignoring any exceptions
         }
     }
 
