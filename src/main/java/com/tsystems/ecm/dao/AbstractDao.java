@@ -30,7 +30,7 @@ public abstract class AbstractDao<T> {
     }
 
     /**
-     * Deletes the entity.
+     * Deletes the entity permanently.
      *
      * @param entity the entity to be deleted
      */

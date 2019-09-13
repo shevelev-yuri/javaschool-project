@@ -58,7 +58,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 user.getName(), user.getPassword(), true, true, true,
                 true, getAuthority(user.getRole()));
 
-        if (log.isDebugEnabled()) log.debug("Created Spring Security user: {}", userDetails.toString());
+        String logString = userDetails.toString();
+
+        log.debug("Created Spring Security user: {}", logString);
 
         return userDetails;
     }

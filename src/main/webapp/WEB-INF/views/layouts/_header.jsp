@@ -32,6 +32,11 @@
                 </c:choose></c:forEach><c:if test="${empty param[name] }"><c:param name="${name}" value="${value}"/></c:if></c:url>">
                     <img id='en' alt='' src='${pageContext.request.contextPath}/resources/static/img/uk.png'/></a>
 
+                <a href="<c:url value=""><c:set var="value3" value="de"/><c:forEach items="${paramValues}" var="params"><c:choose><c:when test="${params.key == name}"><c:param name="${name}" value="${value3}"/>
+                 </c:when><c:otherwise><c:forEach items="${params.value}" var="val"><c:param name="${params.key}" value="${val}"/></c:forEach></c:otherwise></c:choose></c:forEach><c:if test="${empty param[name] }">
+                 <c:param name="${name}" value="${value3}"/></c:if></c:url>">
+                    <img id="de" alt="" src="${pageContext.request.contextPath}/resources/static/img/de.png"/></a>
+
                 <a href="<c:url value=""><c:set var="value2" value="ru"/><c:forEach items="${paramValues}" var="params"><c:choose><c:when test="${params.key == name}"><c:param name="${name}" value="${value2}"/>
                  </c:when><c:otherwise><c:forEach items="${params.value}" var="val"><c:param name="${params.key}" value="${val}"/></c:forEach></c:otherwise></c:choose></c:forEach><c:if test="${empty param[name] }">
                  <c:param name="${name}" value="${value2}"/></c:if></c:url>">

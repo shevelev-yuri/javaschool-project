@@ -144,7 +144,7 @@ public class AppointmentController {
         AppointmentDto appointment;
         appointment = initAppointmentDto(treatmentId, patientId, weekdays, times, duration, dose, redirectAttributes);
         if (appointment == null) {
-            return new ModelAndView(REDIRECT_PATIENTS);
+            return new ModelAndView(REDIRECT_ERROR400);
         }
         appointment.setId(appointmentService.addOrUpdateAppointment(appointment));
 
@@ -176,10 +176,10 @@ public class AppointmentController {
         if (patientId != null && !patientId.isEmpty()) {
             patient = parsePatientId(patientId);
             if (patient == null) {
-                return REDIRECT_APPOINTMENTS;
+                return REDIRECT_ERROR400;
             }
         } else {
-            if (patientPrev == null || patientPrev.getName() == null) return REDIRECT_APPOINTMENTS;
+            if (patientPrev == null || patientPrev.getName() == null) return REDIRECT_ERROR400;
             patient = patientService.get(patientPrev.getId());
         }
 
@@ -335,17 +335,27 @@ public class AppointmentController {
     }
 
     private boolean validateForm(TreatmentType treatmentType, String[] weekdays, String duration, String dose) {
-        if (weekdays == null) return false;
+        if (weekdays == null) {
+            log.error("Days of week not selected!");
+            return false;
+        }
 
         try {
             int dur = Integer.parseInt(duration);
             if (dur > 10 || dur < 1) {
+                log.error("Invalid duration!");
                 return false;
             }
         } catch (NumberFormatException nfe) {
+            log.error("Invalid duration: not a number!");
             return false;
         }
-        return treatmentType != TreatmentType.MEDICATION || (dose != null && !dose.isEmpty());
+        if (treatmentType != TreatmentType.MEDICATION || (dose != null && !dose.isEmpty())) {
+            return true;
+        } else {
+            log.error("Dose not specified for medication type treatment!");
+            return false;
+        }
     }
 
     private PatientDto parsePatientId(String patientId) {
