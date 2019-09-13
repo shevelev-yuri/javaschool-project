@@ -1,9 +1,7 @@
 package com.tsystems.ecm.entity;
 
 import com.tsystems.ecm.entity.enums.PatientStatus;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -12,6 +10,8 @@ import javax.persistence.*;
  */
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @ToString
 @Entity
 @Table(name = "patients")

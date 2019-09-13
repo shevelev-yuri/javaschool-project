@@ -40,6 +40,7 @@ public class StringConstants {
     public static final String PATIENTS_ADD = "patients/add";
     public static final String REDIRECT_APPOINTMENTS_ADD = "redirect:/appointments/add";
     public static final String PATIENTS_PATIENTS = "patients/patients";
+    public static final String PATIENT_WITH_SPECIFIED_INSURANCE_NUMBER_ALREADY_EXISTS = "Patient with specified insurance number already exists!";
 
     //EventService strings
     public static final String APPOINTMENT_CANCELLATION_EVENTS_CANCEL_REASON = "Сancelled due to cancellation of appointment";
