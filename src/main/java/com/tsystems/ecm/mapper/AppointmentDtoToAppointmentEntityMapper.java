@@ -2,6 +2,7 @@ package com.tsystems.ecm.mapper;
 
 import com.tsystems.ecm.dto.AppointmentDto;
 import com.tsystems.ecm.entity.Appointment;
+import com.tsystems.ecm.entity.enums.TreatmentType;
 import org.springframework.stereotype.Component;
 
 /**
@@ -48,7 +49,7 @@ public class AppointmentDtoToAppointmentEntityMapper {
         dst.setType(src.getType());
         dst.setRegimen(src.getRegimen());
         dst.setDuration(src.getDuration());
-        dst.setDose(src.getDose());
+        if(src.getType() == TreatmentType.MEDICATION) dst.setDose(src.getDose());
 
         return dst;
     }

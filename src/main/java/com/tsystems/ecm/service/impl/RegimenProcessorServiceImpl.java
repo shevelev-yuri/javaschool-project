@@ -125,11 +125,11 @@ public class RegimenProcessorServiceImpl implements RegimenProcessorService {
         if (times != null) {
             localTimes = new ArrayList<>(times.length);
             for (String time : times) {
-                if ("Morning".equals(time)) {
+                if (time.equals("Morning")) {
                     localTimes.add(LocalTime.parse("09:00:00"));
-                } else if ("Afternoon".equals(time)) {
+                } else if (time.equals("Afternoon")) {
                     localTimes.add(LocalTime.parse(("14:00:00")));
-                } else if ("Evening".equals(time)) {
+                } else if (time.equals("Evening")) {
                     localTimes.add(LocalTime.parse(("19:00:00")));
                 }
             }

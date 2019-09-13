@@ -336,7 +336,7 @@ label {
 .table-post-div {
     width: 100%;
     min-width: 835px;
-    max-width: 90%;
+    max-width: 100%;
     border-radius: 10px;
     background-color: #e3f2fd;
     padding: 20px;
@@ -372,4 +372,36 @@ label {
 .lang-set {
     display: inline;
     padding: 5px 15px;
+}
+
+.error-div {
+    background-color: #e3f2fd;
+    width: 50%;
+    margin: auto;
+    padding: 15px 15px;
+    border-radius: 10px;
+}
+
+.error-div h1 {
+    color: #000037;
+    margin: 10px 0;
+    font-size: 4rem;
+}
+
+.error-div h3 {
+    font-size: 1.2rem;
+}
+
+.error-div p {
+    font-size: 1.2rem;
+}
+
+.error-div a {
+    color: #0b3706;
+    font-size: 1.2rem;
+}
+
+.error-div a:hover {
+    color: #1c7430;
+    font-size: 1.2rem;
 }

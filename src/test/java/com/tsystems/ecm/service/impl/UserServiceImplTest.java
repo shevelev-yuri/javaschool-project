@@ -5,7 +5,6 @@ import com.tsystems.ecm.dao.UserDao;
 import com.tsystems.ecm.dto.UserDto;
 import com.tsystems.ecm.entity.User;
 import com.tsystems.ecm.entity.enums.Role;
-import com.tsystems.ecm.mapper.UserEntityToUserDtoMapper;
 import com.tsystems.ecm.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,7 +13,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
@@ -23,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class,
@@ -36,7 +34,7 @@ public class UserServiceImplTest {
     private static final long DOC_ID = 1L;
     private static final String DOC_LOGIN = "login_1";
     private static final String DOC_PSWD = "pass_1";
-    private static final String DOC_NAME = "DOctor";
+    private static final String DOC_NAME = "Doctor";
     private static final Role DOC_ROLE = Role.DOCTOR;
 
     private static final User NURSE = new User();
@@ -47,7 +45,6 @@ public class UserServiceImplTest {
     private static final Role NURSE_ROLE = Role.NURSE;
 
     private static final UserDto NEW_DOCTOR = new UserDto();
-    private static final long NEW_USER_ID = 3L;
 
     private static final List<User> ALL_USERS = new ArrayList<>();
 
@@ -56,12 +53,6 @@ public class UserServiceImplTest {
 
     @Autowired
     private UserDao userDao;
-
-    @Autowired
-    private UserEntityToUserDtoMapper userEntityToUserDtoMapper;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @BeforeClass
     public static void setUp() {
@@ -81,23 +72,12 @@ public class UserServiceImplTest {
         NURSE.setRole(NURSE_ROLE);
         log.trace("Nurse user: {}", NURSE.toString());
         ALL_USERS.add(NURSE);
-
-        log.trace("Setting up new userDto.");
-
-
     }
 
     @Before
     public void setDao() {
         when(userDao.getAll()).thenReturn(ALL_USERS);
         when(userDao.getByLogin(NURSE_LOGIN)).thenReturn(NURSE);
-
-        doAnswer(invocation -> {
-            User arg0 = invocation.getArgument(0);
-            assertEquals(3, arg0.getId());
-            return null;
-        }).when(userDao).save(any(User.class));
-
     }
 
     @Test
@@ -138,13 +118,13 @@ public class UserServiceImplTest {
     public void registerNewUser_success() {
         log.info("Testing: save new user.");
 
-        NEW_DOCTOR.setLogin("login");
+        NEW_DOCTOR.setLogin("somelogin");
         NEW_DOCTOR.setPassword("pswd");
         NEW_DOCTOR.setName("name");
         NEW_DOCTOR.setRole(Role.DOCTOR);
 
         //expected
-        long expected = 3L;
+        long expected = 0L;
 
         //actual
         long actual = userService.registerNewUser(NEW_DOCTOR);

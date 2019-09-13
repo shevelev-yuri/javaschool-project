@@ -126,7 +126,12 @@ public class PatientController {
             return new ModelAndView(PATIENTS_ADD, "doctors", doctors);
         }
 
-        patient.setId(patientService.addPatient(patient));
+        try {
+            patient.setId(patientService.addPatient(patient));
+        } catch (Exception e) {
+            return new ModelAndView(REDIRECT_ERROR400, "err", "insuranceAlreadyExists");
+        }
+
         redirectAttributes.addFlashAttribute(PATIENT, patient);
 
         if (log.isDebugEnabled()) log.debug("Created new patient. {}", patient.toString());
